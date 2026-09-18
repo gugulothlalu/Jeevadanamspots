@@ -784,7 +784,7 @@ function App() {
       <header className="header">
         <div className="brand">
           <div className="brand-icon">
-            🥣
+            🤝
           </div>
 
           <div>
