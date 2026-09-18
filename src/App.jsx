@@ -788,9 +788,9 @@ function App() {
           </div>
 
           <div>
-            <h1>
-              Jeevadanamspots
-            </h1>
+            <h1 className="brand-title">
+  <span className="brand-jeevadanam">Jeevadanam</span><span className="brand-spots">spots</span>
+</h1>
 
             <p>
               Open Community Service • 
