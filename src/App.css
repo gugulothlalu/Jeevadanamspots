@@ -1645,3 +1645,48 @@ main {
     min-height: 48px;
   }
 }
+/* =====================================================
+   JEEVADANAMSPOTS BRAND HEADING
+   Matches the logo colours
+===================================================== */
+
+.brand-title {
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", "Helvetica", sans-serif;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -1.2px;
+  white-space: nowrap;
+}
+
+.brand-jeevadanam {
+  color: #075c3b;
+}
+
+.brand-spots {
+  color: #f28a00;
+}
+
+/* Small tagline under the heading */
+.brand p {
+  margin: 6px 0 0;
+  color: #176b4a;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .brand-title {
+    font-size: 23px;
+    letter-spacing: -0.8px;
+  }
+
+  .brand p {
+    font-size: 10px;
+    margin-top: 4px;
+  }
+}
