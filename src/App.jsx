@@ -484,59 +484,48 @@ function App() {
         } = position.coords;
 
         try {
-          const response =
-            await fetch(
-              `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
-            );
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+  );
 
-          if (!response.ok) {
-            throw new Error(
-              "Location lookup failed"
-            );
-          }
+  if (!response.ok) {
+    throw new Error("Location lookup failed");
+  }
 
-          const data =
-            await response.json();
+  const data = await response.json();
 
-          const address =
-            data.address || {};
+  const fullAddress =
+    data.display_name ||
+    latitude + ", " + longitude;
 
-          const area =
-            address.suburb ||
-            address.neighbourhood ||
-            address.village ||
-            address.town ||
-            address.city ||
-            address.county ||
-            "";
+  setForm((previous) => ({
+    ...previous,
+    area: fullAddress,
+    address: fullAddress,
+    latitude,
+    longitude,
+  }));
+} catch {
+  setForm((previous) => ({
+    ...previous,
+    area:
+      latitude.toFixed(5) +
+      ", " +
+      longitude.toFixed(5),
+    address:
+      latitude +
+      ", " +
+      longitude,
+    latitude,
+    longitude,
+  }));
 
-          const landmark =
-            data.display_name ||
-            data.name ||
-            `${latitude}, ${longitude}`;
-
-          setForm((previous) => ({
-            ...previous,
-            area: `${area}, 
-            address: landmark,
-            latitude,
-            longitude,
-          }));
-        } catch {
-         setForm((previous) => ({
-  ...previous,
-  area: `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`,
-  address: `${latitude}, ${longitude}`,
-  latitude,
-  longitude,
-}));
-
-          setLocationError(
-            "Area name could not be fetched. Coordinates added instead."
-          );
-        } finally {
-          setLocationLoading(false);
-        }
+  setLocationError(
+    "Full address could not be fetched. Coordinates added instead."
+  );
+} finally {
+  setLocationLoading(false);
+}
       },
 
       (geoError) => {
