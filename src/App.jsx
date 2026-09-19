@@ -737,7 +737,7 @@ function App() {
 </h1>
 
             <p>
-              Open Community Service • Khammam
+              Open Community Service • 
             </p>
           </div>
         </div>
