@@ -16,51 +16,10 @@ const categories = [
   { name: "Other Help", icon: "💛" },
 ];
 
-const sampleServices = [
-  {
-    id: "demo-1",
-    title: "Free Annadhanam",
-    category: "Food & Annadhanam",
-    area: "Khammam Town",
-    address: "Near Khammam Bus Station",
-    date: new Date().toISOString().slice(0, 10),
-    start: "12:00",
-    end: "14:30",
-    notes: "Free meals available for everyone.",
-    status: "demo",
-    interestedCount: 0,
-    reportCount: 0,
-  },
-  {
-    id: "demo-2",
-    title: "Free Medical Camp",
-    category: "Medical Help",
-    area: "Wyra Road",
-    address: "Community Hall, Wyra Road",
-    date: new Date().toISOString().slice(0, 10),
-    start: "10:00",
-    end: "13:00",
-    notes: "General health check-up and basic medical guidance.",
-    status: "demo",
-    interestedCount: 0,
-    reportCount: 0,
-  },
-  {
-    id: "demo-3",
-    title: "Blood Donation Camp",
-    category: "Blood Donation",
-    area: "Kothagudem Road",
-    address: "Near Government Hospital",
-    date: new Date().toISOString().slice(0, 10),
-    start: "09:00",
-    end: "12:00",
-    notes: "Contact the organizers at the venue for eligibility.",
-    status: "demo",
-    interestedCount: 0,
-    reportCount: 0,
-  },
-];
-
+const allServices = useMemo(
+  () => services,
+  [services]
+);
 const today = () => new Date().toISOString().slice(0, 10);
 
 const initialForm = {
