@@ -523,15 +523,13 @@ function App() {
             longitude,
           }));
         } catch {
-          setForm((previous) => ({
-            ...previous,
-            area: `${latitude.toFixed(
-              5
-            )}, ${longitude.toFixed(5)}`,
-            address: `${latitude}, ${longitude}`,
-            latitude,
-            longitude,
-          }));
+         setForm((previous) => ({
+  ...previous,
+  area: `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`,
+  address: `${latitude}, ${longitude}`,
+  latitude,
+  longitude,
+}));
 
           setLocationError(
             "Area name could not be fetched. Coordinates added instead."
