@@ -351,9 +351,9 @@ function App() {
     -------------------------------------------------------
   */
   const allServices = useMemo(
-    () => [...services, ...sampleServices],
-    [services]
-  );
+  () => services,
+  [services]
+);
 
   /*
     -------------------------------------------------------
@@ -1153,19 +1153,9 @@ function App() {
                             {service.category}
                           </span>
 
-                          {String(
-                            service.id
-                          ).startsWith(
-                            "demo-"
-                          ) ? (
-                            <span className="demo-badge">
-                              Sample
-                            </span>
-                          ) : (
-                            <span className="local-badge">
-                              Community
-                            </span>
-                          )}
+                          <span className="local-badge">
+  Community
+</span>
 
                         </div>
 
