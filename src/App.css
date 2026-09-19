@@ -1690,3 +1690,46 @@ main {
     margin-top: 4px;
   }
 }
+/* =========================================================
+   COMMUNITY FEED — DARK LOCATION / DATE / TIME TEXT
+   ========================================================= */
+
+.service-meta {
+  color: #0f1f38;
+}
+
+.service-meta .service-full-address {
+  color: #0f1f38;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.service-meta > span {
+  color: #0f1f38;
+  font-weight: 600;
+}
+
+.service-meta > span::first-letter {
+  color: inherit;
+}
+
+/* Keep the actual information clearly readable */
+.service-full-address,
+.service-meta span {
+  color: #0f1f38 !important;
+}
+
+/* Date and time */
+.service-meta span:nth-child(2),
+.service-meta span:nth-child(3) {
+  color: #17243a !important;
+  font-weight: 600;
+}
+
+/* Address can wrap into multiple lines */
+.service-full-address {
+  display: block;
+  max-width: 100%;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
