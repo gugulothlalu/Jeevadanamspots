@@ -824,7 +824,6 @@ function App() {
             onClick={openForm}
           >
             <span>＋</span>
-            Share a Service
           </button>
         </div>
       </header>
