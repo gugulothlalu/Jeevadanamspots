@@ -17,6 +17,7 @@ const categories = [
 ];
 
 
+
 const today = () => new Date().toISOString().slice(0, 10);
 
 const initialForm = {
@@ -465,132 +466,102 @@ function App() {
     -------------------------------------------------------
   */
   async function fetchCurrentLocation() {
-  if (!navigator.geolocation) {
-    setLocationError(
-      "Location is not supported by this browser."
-    );
-    return;
-  }
+    if (!navigator.geolocation) {
+      setLocationError(
+        "Location is not supported by this browser."
+      );
+      return;
+    }
 
-  setLocationLoading(true);
-  setLocationError("");
+    setLocationLoading(true);
+    setLocationError("");
 
-  navigator.geolocation.getCurrentPosition(
-    async (position) => {
-      const {
-        latitude,
-        longitude,
-      } = position.coords;
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const {
+          latitude,
+          longitude,
+        } = position.coords;
 
-      try {
-        const params = new URLSearchParams({
-          lat: String(latitude),
-          lon: String(longitude),
-          format: "jsonv2",
-          addressdetails: "1",
-        });
+        try {
+          const response =
+            await fetch(
+              `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`
+            );
 
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?${params}`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Accept-Language": "en",
-            },
+          if (!response.ok) {
+            throw new Error(
+              "Location lookup failed"
+            );
           }
-        );
 
-        if (!response.ok) {
-          throw new Error(
-            "Location lookup failed"
+          const data =
+            await response.json();
+
+          const address =
+            data.address || {};
+
+          const area =
+            address.suburb ||
+            address.neighbourhood ||
+            address.village ||
+            address.town ||
+            address.city ||
+            address.county ||
+            "";
+
+          const landmark =
+            data.display_name ||
+            data.name ||
+            `${latitude}, ${longitude}`;
+
+          setForm((previous) => ({
+            ...previous,
+            area: `${area}, 
+            address: landmark,
+            latitude,
+            longitude,
+          }));
+        } catch {
+          setForm((previous) => ({
+            ...previous,
+            area: `${latitude.toFixed(
+              5
+            )}, ${longitude.toFixed(5)}`,
+            address: `${latitude}, ${longitude}`,
+            latitude,
+            longitude,
+          }));
+
+          setLocationError(
+            "Area name could not be fetched. Coordinates added instead."
+          );
+        } finally {
+          setLocationLoading(false);
+        }
+      },
+
+      (geoError) => {
+        setLocationLoading(false);
+
+        if (geoError.code === 1) {
+          setLocationError(
+            "Location permission denied. Please enter your area manually."
+          );
+        } else {
+          setLocationError(
+            "Unable to fetch location. Please enter your area manually."
           );
         }
+      },
 
-        const data = await response.json();
-
-        const address =
-          data.address || {};
-
-        // Actual area — no forced Khammam
-        const area =
-          address.suburb ||
-          address.neighbourhood ||
-          address.village ||
-          address.town ||
-          address.city_district ||
-          address.city ||
-          address.county ||
-          "";
-
-        // Full address including pincode
-        const landmark =
-          data.display_name ||
-          data.name ||
-          `${latitude}, ${longitude}`;
-
-        setForm((previous) => ({
-          ...previous,
-
-          // Actual selected area
-          area: area,
-
-          // Full reverse-geocoded address
-          address: landmark,
-
-          // Exact GPS coordinates
-          latitude,
-          longitude,
-        }));
-      } catch (error) {
-        console.error(
-          "Location lookup error:",
-          error
-        );
-
-        // Even if address lookup fails,
-        // save the exact GPS coordinates.
-        setForm((previous) => ({
-          ...previous,
-
-          area: "",
-
-          address: `${latitude.toFixed(
-            6
-          )}, ${longitude.toFixed(6)}`,
-
-          latitude,
-          longitude,
-        }));
-
-        setLocationError(
-          "Full address could not be fetched. Exact coordinates were saved."
-        );
-      } finally {
-        setLocationLoading(false);
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 60000,
       }
-    },
-
-    (geoError) => {
-      setLocationLoading(false);
-
-      if (geoError.code === 1) {
-        setLocationError(
-          "Location permission denied. Please allow location access."
-        );
-      } else {
-        setLocationError(
-          "Unable to fetch location. Please enter the location manually."
-        );
-      }
-    },
-
-    {
-      enableHighAccuracy: true,
-      timeout: 15000,
-      maximumAge: 60000,
-    }
-  );
-}
+    );
+  }
 
   /*
     -------------------------------------------------------
@@ -779,7 +750,7 @@ function App() {
 </h1>
 
             <p>
-              Open Community Service • 
+              Open Community Service • Khammam
             </p>
           </div>
         </div>
@@ -866,7 +837,7 @@ function App() {
             onClick={openForm}
           >
             <span>＋</span>
-          
+            Share a Service
           </button>
         </div>
       </header>
@@ -1246,7 +1217,7 @@ function App() {
 
 
                         {/* META */}
-                      <div className="service-meta">
+                        <div className="service-meta">
 
   <span className="service-full-address">
     📍 {service.address || service.area}
