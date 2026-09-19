@@ -16,10 +16,7 @@ const categories = [
   { name: "Other Help", icon: "💛" },
 ];
 
-const allServices = useMemo(
-  () => services,
-  [services]
-);
+
 const today = () => new Date().toISOString().slice(0, 10);
 
 const initialForm = {
