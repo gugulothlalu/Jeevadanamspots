@@ -1733,3 +1733,752 @@ main {
   word-break: normal;
   overflow-wrap: anywhere;
 }
+/* =====================================================
+   HOW JEEVADANAM WORKS
+===================================================== */
+
+.how-it-works {
+  margin: 34px 0 40px;
+  padding: 38px;
+  border: 1px solid #e5e9ef;
+  border-radius: 22px;
+  background: #ffffff;
+}
+
+.how-heading {
+  max-width: 680px;
+  margin-bottom: 30px;
+}
+
+.how-eyebrow {
+  display: inline-block;
+  margin-bottom: 9px;
+  color: #d97706;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+}
+
+.how-heading h2 {
+  margin: 0;
+  color: #101a30;
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -0.8px;
+}
+
+.how-heading p {
+  margin: 10px 0 0;
+  color: #718096;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.how-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.how-card {
+  padding: 25px;
+  border: 1px solid #e3e8ef;
+  border-radius: 18px;
+  background: #f9fbfd;
+}
+
+.offer-help-card {
+  background: #fffaf2;
+  border-color: #f1dfc2;
+}
+
+.how-card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 25px;
+}
+
+.how-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 15px;
+  background: #eaf1f8;
+  font-size: 25px;
+}
+
+.how-icon.offer {
+  background: #fff0d5;
+}
+
+.how-card-header h3 {
+  margin: 0;
+  color: #172033;
+  font-size: 19px;
+}
+
+.how-card-header p {
+  margin: 5px 0 0;
+  color: #718096;
+  font-size: 12px;
+}
+
+.how-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+
+.how-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 13px;
+}
+
+.how-step > span {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  background: #101a30;
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.offer-help-card .how-step > span {
+  background: #df7900;
+}
+
+.how-step strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #26344a;
+  font-size: 13px;
+}
+
+.how-step p {
+  margin: 0;
+  color: #718096;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.how-action {
+  width: 100%;
+  margin-top: 25px;
+  padding: 13px 18px;
+  border: 1px solid #d7e0ea;
+  border-radius: 11px;
+  background: white;
+  color: #172033;
+  font-size: 13px;
+  font-weight: 700;
+  transition: 0.2s ease;
+}
+
+.how-action:hover {
+  border-color: #aebdce;
+  transform: translateY(-1px);
+}
+
+.how-action.offer {
+  border-color: #efcf9e;
+  background: #fff5e5;
+  color: #a45a00;
+}
+
+.how-action.offer:hover {
+  border-color: #e5b96f;
+  background: #fff0d5;
+}
+
+@media (max-width: 700px) {
+
+  .how-it-works {
+    margin: 25px 0 30px;
+    padding: 22px 16px;
+    border-radius: 17px;
+  }
+
+  .how-heading h2 {
+    font-size: 23px;
+  }
+
+  .how-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .how-card {
+    padding: 20px;
+  }
+
+}
+.ai-floating-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 999;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 13px 18px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #075c3b;
+  color: white;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  box-shadow: 0 10px 30px rgba(7, 92, 59, 0.25);
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.ai-floating-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 35px rgba(7, 92, 59, 0.3);
+}
+
+.ai-floating-icon {
+  display: grid;
+  place-items: center;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+
+  background: #fff4d8;
+
+  font-size: 17px;
+}
+
+.ai-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+
+  z-index: 1000;
+
+  width: min(390px, calc(100vw - 30px));
+  height: 560px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid #e2e8ef;
+  border-radius: 20px;
+
+  background: white;
+
+  box-shadow: 0 20px 70px rgba(15, 23, 42, 0.2);
+}
+
+.ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 17px;
+
+  background: #075c3b;
+  color: white;
+}
+
+.ai-header-left {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.ai-avatar {
+  display: grid;
+  place-items: center;
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 13px;
+
+  background: #fff4d8;
+
+  font-size: 22px;
+}
+
+.ai-header strong {
+  display: block;
+  font-size: 15px;
+}
+
+.ai-header small {
+  display: block;
+  margin-top: 3px;
+  color: #cce5d9;
+  font-size: 11px;
+}
+
+.ai-close {
+  width: 34px;
+  height: 34px;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.ai-messages {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding: 18px;
+
+  background: #f7f9fb;
+}
+
+.ai-message {
+  width: fit-content;
+  max-width: 85%;
+
+  margin-bottom: 12px;
+  padding: 11px 13px;
+
+  border-radius: 14px 14px 14px 4px;
+
+  background: white;
+  border: 1px solid #e5e9ef;
+
+  color: #26344a;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.ai-message.user {
+  margin-left: auto;
+
+  border: 0;
+  border-radius: 14px 14px 4px 14px;
+
+  background: #075c3b;
+  color: white;
+}
+
+.ai-quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+
+  margin-top: 14px;
+}
+
+.ai-quick-actions button {
+  padding: 10px;
+
+  border: 1px solid #dfe5ec;
+  border-radius: 10px;
+
+  background: white;
+  color: #344257;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.ai-quick-actions button:hover {
+  border-color: #e3a54c;
+  background: #fff8ec;
+}
+
+.ai-input-area {
+  display: flex;
+  gap: 8px;
+
+  padding: 12px;
+
+  border-top: 1px solid #e4e9ef;
+  background: white;
+}
+
+.ai-input-area input {
+  flex: 1;
+  min-width: 0;
+
+  padding: 12px 13px;
+
+  border: 1px solid #dce3eb;
+  border-radius: 11px;
+
+  outline: none;
+
+  font-size: 13px;
+}
+
+.ai-input-area input:focus {
+  border-color: #075c3b;
+}
+
+.ai-input-area button {
+  width: 44px;
+
+  border: 0;
+  border-radius: 11px;
+
+  background: #df7900;
+  color: white;
+
+  font-size: 18px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+
+  .ai-floating-button {
+    right: 15px;
+    bottom: 15px;
+    padding: 12px 15px;
+  }
+
+  .ai-panel {
+    right: 10px;
+    bottom: 10px;
+
+    width: calc(100vw - 20px);
+    height: min(560px, calc(100vh - 20px));
+
+    border-radius: 17px;
+  }
+
+}
+/* =====================================================
+   JEEVADANAM AI ASSISTANT
+===================================================== */
+
+.ai-floating-button {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 999;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 13px 18px;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: #075c3b;
+  color: white;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+
+  box-shadow:
+    0 10px 30px rgba(7, 92, 59, 0.28);
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.ai-floating-button:hover {
+  transform: translateY(-2px);
+}
+
+.ai-floating-icon {
+  display: grid;
+  place-items: center;
+
+  width: 31px;
+  height: 31px;
+
+  border-radius: 50%;
+
+  background: #fff3d0;
+
+  font-size: 17px;
+}
+
+.ai-assistant {
+  position: fixed;
+
+  right: 24px;
+  bottom: 24px;
+
+  z-index: 1000;
+
+  width: 390px;
+  height: 570px;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid #e1e7ed;
+  border-radius: 20px;
+
+  background: white;
+
+  box-shadow:
+    0 20px 70px rgba(15, 23, 42, 0.22);
+}
+
+.ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 16px;
+
+  background: #075c3b;
+  color: white;
+}
+
+.ai-header-info {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+
+.ai-avatar {
+  display: grid;
+  place-items: center;
+
+  width: 43px;
+  height: 43px;
+
+  border-radius: 13px;
+
+  background: #fff3d0;
+
+  font-size: 22px;
+}
+
+.ai-header strong {
+  display: block;
+  font-size: 15px;
+}
+
+.ai-header small {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #cce4d8;
+
+  font-size: 11px;
+}
+
+.ai-close {
+  display: grid;
+  place-items: center;
+
+  width: 35px;
+  height: 35px;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(255,255,255,0.12);
+
+  color: white;
+
+  font-size: 23px;
+
+  cursor: pointer;
+}
+
+.ai-language {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 10px 14px;
+
+  border-bottom: 1px solid #e7ebef;
+
+  background: #fafbfc;
+
+  color: #64748b;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ai-language select {
+  padding: 6px 9px;
+
+  border: 1px solid #d9e1e8;
+  border-radius: 8px;
+
+  background: white;
+
+  color: #26344a;
+
+  font-size: 12px;
+}
+
+.ai-messages {
+  flex: 1;
+
+  overflow-y: auto;
+
+  padding: 17px;
+
+  background: #f7f9fb;
+}
+
+.ai-message {
+  width: fit-content;
+  max-width: 86%;
+
+  margin-bottom: 12px;
+
+  padding: 11px 13px;
+
+  border: 1px solid #e3e8ee;
+  border-radius: 14px 14px 14px 4px;
+
+  background: white;
+
+  color: #26344a;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.ai-message.user {
+  margin-left: auto;
+
+  border: 0;
+
+  border-radius: 14px 14px 4px 14px;
+
+  background: #075c3b;
+
+  color: white;
+}
+
+.ai-quick {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 8px;
+
+  margin-top: 12px;
+}
+
+.ai-quick button {
+  padding: 10px;
+
+  border: 1px solid #dce3eb;
+  border-radius: 10px;
+
+  background: white;
+
+  color: #344257;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.ai-quick button:hover {
+  border-color: #e5a34b;
+  background: #fff8ed;
+}
+
+.ai-input {
+  display: flex;
+
+  gap: 8px;
+
+  padding: 12px;
+
+  border-top: 1px solid #e4e9ef;
+
+  background: white;
+}
+
+.ai-input input {
+  flex: 1;
+  min-width: 0;
+
+  padding: 12px;
+
+  border: 1px solid #dce3eb;
+  border-radius: 11px;
+
+  outline: none;
+
+  font-size: 13px;
+}
+
+.ai-input input:focus {
+  border-color: #075c3b;
+}
+
+.ai-input button {
+  width: 44px;
+
+  border: 0;
+  border-radius: 11px;
+
+  background: #df7900;
+
+  color: white;
+
+  font-size: 18px;
+
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+
+  .ai-floating-button {
+    right: 15px;
+    bottom: 15px;
+
+    padding: 12px 15px;
+  }
+
+  .ai-assistant {
+    right: 10px;
+    bottom: 10px;
+
+    width: calc(100vw - 20px);
+    height: calc(100vh - 20px);
+
+    max-height: 570px;
+
+    border-radius: 17px;
+  }
+}
