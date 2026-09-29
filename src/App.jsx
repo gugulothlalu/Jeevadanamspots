@@ -444,7 +444,7 @@ function App() {
   });
 
   const SITE_TEXT = {
-    en: { open:"Open Community Service India", eyebrow:"INDIA • OPEN TO EVERYONE", title1:"Small acts of kindness.", title2:"A stronger community.", desc:"Find help, share resources and discover community services across India. Everyone is welcome.", share:"＋ Share a Community Service", simple:"SIMPLE • OPEN • COMMUNITY", how:"How does Jeevadanam work?", howDesc:"Find the help you need or share a service that can help someone in your community.", need:"I Need Help", findNear:"Find a community service near you.", choose:"Choose a category", find:"Find a service", get:"Get help", want:"I Want to Help", all:"All Services", today:"🟢 Today Only", active:"🔥 Active Now", near:"📍 Near Me", results:"All Community Services", feed:"Community feed", no:"No services found", reset:"Reset Search", details:"View Details", directions:"📍 Directions", shareBottom:"Have something to share?", cancel:"Cancel", findDesc:"Food, medical help, blood donation, education, jobs and more.", searchDesc:"Search by service, area or landmark. You can also use Near Me.", getDesc:"Check the details and use Directions to reach the location.", findCommunity:"Find Community Help →", wantDesc:"Share a useful service with others.", shareService:"Share a service", shareServiceDesc:"Add the name and category of the community service.", addLocation:"Add location & timing", addLocationDesc:"Add the public location, date and available time.", publishCommunity:"Publish for the community", publishCommunityDesc:"People can discover your service without creating an account.", shareAction:"＋ Share a Community Service", publish:"✓ Publish Service" },
+    en: { open:"Open Community Service", eyebrow:"INDIA • OPEN TO EVERYONE", title1:"Small acts of kindness.", title2:"A stronger community.", desc:"Find help, share resources and discover community services across India. Everyone is welcome.", share:"＋ Share a Community Service", simple:"SIMPLE • OPEN • COMMUNITY", how:"How does Jeevadanam work?", howDesc:"Find the help you need or share a service that can help someone in your community.", need:"I Need Help", findNear:"Find a community service near you.", choose:"Choose a category", find:"Find a service", get:"Get help", want:"I Want to Help", all:"All Services", today:"🟢 Today Only", active:"🔥 Active Now", near:"📍 Near Me", results:"All Community Services", feed:"Community feed", no:"No services found", reset:"Reset Search", details:"View Details", directions:"📍 Directions", shareBottom:"Have something to share?", cancel:"Cancel", findDesc:"Food, medical help, blood donation, education, jobs and more.", searchDesc:"Search by service, area or landmark. You can also use Near Me.", getDesc:"Check the details and use Directions to reach the location.", findCommunity:"Find Community Help →", wantDesc:"Share a useful service with others.", shareService:"Share a service", shareServiceDesc:"Add the name and category of the community service.", addLocation:"Add location & timing", addLocationDesc:"Add the public location, date and available time.", publishCommunity:"Publish for the community", publishCommunityDesc:"People can discover your service without creating an account.", shareAction:"＋ Share a Community Service", publish:"✓ Publish Service" },
     te: { open:"ఓపెన్ కమ్యూనిటీ సేవ", eyebrow:"ఖమ్మం • అందరికీ అందుబాటులో", title1:"చిన్న చిన్న సహాయాలు.", title2:"బలమైన సమాజం.", desc:"ఖమ్మంలో సహాయం, వనరులు మరియు కమ్యూనిటీ సేవలను కనుగొనండి. అందరికీ స్వాగతం.", share:"＋ కమ్యూనిటీ సేవను షేర్ చేయండి", simple:"సింపుల్ • ఓపెన్ • కమ్యూనిటీ", how:"Jeevadanam ఎలా పనిచేస్తుంది?", howDesc:"మీకు కావాల్సిన సహాయాన్ని కనుగొనండి లేదా మీ కమ్యూనిటీకి ఉపయోగపడే సేవను షేర్ చేయండి.", need:"నాకు సహాయం కావాలి", findNear:"మీ దగ్గర కమ్యూనిటీ సేవను కనుగొనండి.", choose:"కేటగిరీ ఎంచుకోండి", find:"సేవను కనుగొనండి", get:"సహాయం పొందండి", want:"నేను సహాయం చేయాలనుకుంటున్నాను", all:"అన్ని సేవలు", today:"🟢 ఈరోజు మాత్రమే", active:"🔥 ప్రస్తుతం యాక్టివ్", near:"📍 నా దగ్గర", results:"అన్ని కమ్యూనిటీ సేవలు", feed:"కమ్యూనిటీ ఫీడ్", no:"సేవలు కనిపించలేదు", reset:"సెర్చ్ రీసెట్", details:"వివరాలు చూడండి", directions:"📍 దారి చూపించు", shareBottom:"మీ దగ్గర షేర్ చేయడానికి ఏదైనా ఉందా?", cancel:"రద్దు", findDesc:"ఆహారం, వైద్య సహాయం, రక్తదానం, విద్య, ఉద్యోగాలు ఇంకా మరెన్నో.", searchDesc:"సేవ, ప్రాంతం లేదా ల్యాండ్‌మార్క్ ద్వారా వెతకండి. Near Me కూడా ఉపయోగించవచ్చు.", getDesc:"వివరాలు చూసి Directions ఉపయోగించి స్థానానికి చేరుకోండి.", findCommunity:"కమ్యూనిటీ సహాయం కనుగొనండి →", wantDesc:"ఇతరులతో ఉపయోగకరమైన సేవను పంచుకోండి.", shareService:"సేవను షేర్ చేయండి", shareServiceDesc:"కమ్యూనిటీ సేవ పేరు మరియు కేటగిరీని జోడించండి.", addLocation:"లొకేషన్ & సమయాన్ని జోడించండి", addLocationDesc:"పబ్లిక్ లొకేషన్, తేదీ మరియు అందుబాటులో ఉన్న సమయాన్ని జోడించండి.", publishCommunity:"కమ్యూనిటీ కోసం పబ్లిష్ చేయండి", publishCommunityDesc:"అకౌంట్ క్రియేట్ చేయకుండా ప్రజలు మీ సేవను కనుగొనగలరు.", shareAction:"＋ కమ్యూనిటీ సేవను షేర్ చేయండి", publish:"✓ సేవను పబ్లిష్ చేయండి" },
     hi: { open:"ओपन कम्युनिटी सर्विस", eyebrow:"खम्मम • सभी के लिए खुला", title1:"दयालुता के छोटे-छोटे काम।", title2:"एक मजबूत समुदाय।", desc:"खम्मम में मदद, संसाधन और कम्युनिटी सेवाएँ खोजें। सभी का स्वागत है।", share:"＋ कम्युनिटी सर्विस शेयर करें", simple:"सरल • खुला • समुदाय", how:"Jeevadanam कैसे काम करता है?", howDesc:"अपनी जरूरत की मदद खोजें या अपने समुदाय के लिए उपयोगी सेवा शेयर करें।", need:"मुझे मदद चाहिए", findNear:"अपने पास कम्युनिटी सर्विस खोजें।", choose:"कैटेगरी चुनें", find:"सर्विस खोजें", get:"मदद लें", want:"मैं मदद करना चाहता हूँ", all:"सभी सेवाएँ", today:"🟢 केवल आज", active:"🔥 अभी सक्रिय", near:"📍 मेरे पास", results:"सभी कम्युनिटी सेवाएँ", feed:"कम्युनिटी फीड", no:"कोई सेवा नहीं मिली", reset:"सर्च रीसेट", details:"विवरण देखें", directions:"📍 Directions", shareBottom:"क्या आपके पास शेयर करने के लिए कुछ है?", cancel:"रद्द करें", findDesc:"भोजन, चिकित्सा सहायता, रक्तदान, शिक्षा, नौकरियाँ और बहुत कुछ।", searchDesc:"सेवा, क्षेत्र या लैंडमार्क से खोजें। आप Near Me भी इस्तेमाल कर सकते हैं।", getDesc:"विवरण देखें और स्थान तक पहुँचने के लिए Directions का उपयोग करें।", findCommunity:"कम्युनिटी मदद खोजें →", wantDesc:"दूसरों के साथ उपयोगी सेवा साझा करें।", shareService:"सर्विस शेयर करें", shareServiceDesc:"कम्युनिटी सर्विस का नाम और कैटेगरी जोड़ें।", addLocation:"स्थान और समय जोड़ें", addLocationDesc:"सार्वजनिक स्थान, तारीख और उपलब्ध समय जोड़ें।", publishCommunity:"कम्युनिटी के लिए पब्लिश करें", publishCommunityDesc:"लोग बिना अकाउंट बनाए आपकी सेवा खोज सकते हैं।", shareAction:"＋ कम्युनिटी सर्विस शेयर करें", publish:"✓ सर्विस पब्लिश करें" },
     ta: { open:"திறந்த சமூக சேவை", eyebrow:"கம்மம் • அனைவருக்கும்", title1:"சிறிய கருணை செயல்கள்.", title2:"வலுவான சமூகம்.", desc:"கம்மத்தில் உதவி மற்றும் சமூக சேவைகளை கண்டறியுங்கள். அனைவரும் வரவேற்கப்படுகிறார்கள்.", share:"＋ சமூக சேவையைப் பகிரவும்", simple:"எளிமை • திறந்தது • சமூகம்", how:"Jeevadanam எப்படி செயல்படுகிறது?", howDesc:"உங்களுக்கு தேவையான உதவியை கண்டறியுங்கள் அல்லது சமூகத்திற்கு பயனுள்ள சேவையைப் பகிருங்கள்.", need:"எனக்கு உதவி வேண்டும்", findNear:"உங்கள் அருகிலுள்ள சமூக சேவையை கண்டறியுங்கள்.", choose:"வகையைத் தேர்வு செய்யவும்", find:"சேவையை கண்டறியவும்", get:"உதவி பெறுங்கள்", want:"நான் உதவ விரும்புகிறேன்", all:"அனைத்து சேவைகள்", today:"🟢 இன்று மட்டும்", active:"🔥 இப்போது செயலில்", near:"📍 அருகில்", results:"அனைத்து சமூக சேவைகள்", feed:"சமூக ஊட்டம்", no:"சேவைகள் எதுவும் கிடைக்கவில்லை", reset:"தேடலை மீட்டமை", details:"விவரங்களைப் பார்க்கவும்", directions:"📍 வழிகள்", shareBottom:"பகிர ஏதாவது உள்ளதா?", cancel:"ரத்து", findDesc:"உணவு, மருத்துவ உதவி, இரத்த தானம், கல்வி, வேலைகள் மற்றும் பல.", searchDesc:"சேவை, பகுதி அல்லது அடையாள இடம் மூலம் தேடுங்கள். Near Me-யையும் பயன்படுத்தலாம்.", getDesc:"விவரங்களைப் பார்த்து Directions மூலம் இடத்தை அடையுங்கள்.", findCommunity:"சமூக உதவியை கண்டறியுங்கள் →", wantDesc:"பயனுள்ள சேவையை மற்றவர்களுடன் பகிருங்கள்.", shareService:"சேவையைப் பகிரவும்", shareServiceDesc:"சமூக சேவையின் பெயர் மற்றும் வகையைச் சேர்க்கவும்.", addLocation:"இடம் & நேரத்தைச் சேர்க்கவும்", addLocationDesc:"பொது இடம், தேதி மற்றும் கிடைக்கும் நேரத்தைச் சேர்க்கவும்.", publishCommunity:"சமூகத்திற்காக வெளியிடவும்", publishCommunityDesc:"கணக்கு உருவாக்காமல் மக்கள் உங்கள் சேவையை கண்டறியலாம்.", shareAction:"＋ சமூக சேவையைப் பகிரவும்", publish:"✓ சேவையை வெளியிடவும்" },
@@ -1196,6 +1196,15 @@ function App() {
     latitude,
     longitude
   ) {
+    // Directions has its own location-permission flow.
+    // It does NOT silently use the service location or GPS.
+    if (!navigator.geolocation) {
+      alert(
+        "Location is not supported by this browser."
+      );
+      return;
+    }
+
     let destination = address || "";
 
     if (
@@ -1207,17 +1216,32 @@ function App() {
       destination = `${latitude},${longitude}`;
     }
 
-    const url =
-      `https://www.google.com/maps/dir/?api=1` +
-      `&destination=${encodeURIComponent(
-        destination
-      )}` +
-      `&travelmode=driving`;
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        const origin = `${coords.latitude},${coords.longitude}`;
 
-    window.open(
-      url,
-      "_blank",
-      "noopener,noreferrer"
+        const url =
+          `https://www.google.com/maps/dir/?api=1` +
+          `&origin=${encodeURIComponent(origin)}` +
+          `&destination=${encodeURIComponent(
+            destination
+          )}` +
+          `&travelmode=driving`;
+
+        // Navigate directly to Google Maps.
+        // This avoids opening an unwanted about:blank tab.
+        window.location.assign(url);
+      },
+      () => {
+        alert(
+          "Location permission is required to get directions from your current location."
+        );
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 60000,
+      }
     );
   }
 
