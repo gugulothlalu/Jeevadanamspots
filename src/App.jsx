@@ -1370,42 +1370,49 @@ function App() {
     -------------------------------------------------------
   */
   function useMyLocation() {
-    if (!navigator.geolocation) {
-      alert(
-        "Location is not supported by this browser."
-      );
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        setCurrentUserLocation({
-          latitude: coords.latitude,
-          longitude: coords.longitude,
-        });
-
-        // Near Me filters the existing Jeevadanam feed.
-        // It must not open Google Maps and it must not turn GPS coordinates into a search query.
-        setSearch("");
-        setFilter("near");
-      },
-
-      () => {
-        setCurrentUserLocation(null);
-        setFilter("all");
-        alert(
-          "Location permission was not granted."
-        );
-      }
+  if (!navigator.geolocation) {
+    alert(
+      "Location is not supported by this browser."
     );
+    return;
   }
+
+  navigator.geolocation.getCurrentPosition(
+    ({ coords }) => {
+      setCurrentUserLocation({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      });
+
+      // Near Me filters the existing Jeevadanam feed.
+      // It must not open Google Maps.
+      setSearch("");
+      setFilter("near");
+    },
+
+    () => {
+      setCurrentUserLocation(null);
+      setFilter("all");
+
+      alert(
+        "Location permission was not granted."
+      );
+    },
+
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0,
+    }
+  );
+}
 
   /*
     -------------------------------------------------------
     GOOGLE MAPS DIRECTIONS
     -------------------------------------------------------
   */
-  function openDirections(
+    function openDirections(
     address,
     latitude,
     longitude
@@ -1419,8 +1426,6 @@ function App() {
       return;
     }
 
-    // Directions opens Google Maps directly in a NEW TAB.
-    // Jeevadanam stays open in the current tab.
     let destination = address || "";
 
     if (
@@ -1432,6 +1437,11 @@ function App() {
       destination = `${latitude},${longitude}`;
     }
 
+    if (!destination) {
+      alert("This service does not have a valid location.");
+      return;
+    }
+
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
         const origin = `${coords.latitude},${coords.longitude}`;
@@ -1439,14 +1449,12 @@ function App() {
         const url =
           `https://www.google.com/maps/dir/?api=1` +
           `&origin=${encodeURIComponent(origin)}` +
-          `&destination=${encodeURIComponent(
-            destination
-          )}` +
+          `&destination=${encodeURIComponent(destination)}` +
           `&travelmode=driving`;
 
-        // Navigate directly to Google Maps.
-        // This avoids opening an unwanted about:blank tab.
-        window.location.assign(url);
+        // Open Google Maps in a NEW TAB.
+        // Jeevadanam stays open in the current tab.
+        window.open(url, "_blank", "noopener,noreferrer");
       },
       () => {
         alert(
@@ -1459,56 +1467,6 @@ function App() {
         maximumAge: 60000,
       }
     );
-    if (!destination) {
-      alert("This service does not have a valid location.");
-      return;
-    }
-
-    const openMaps = (origin = "") => {
-      const url =
-        `https://www.google.com/maps/dir/?api=1` +
-        (origin
-          ? `&origin=${encodeURIComponent(origin)}`
-          : "") +
-        `&destination=${encodeURIComponent(destination)}` +
-        `&travelmode=driving`;
-
-      window.open(url, "_blank", "noopener,noreferrer");
-    };
-
-    // Do not change the existing location-permission flow.
-    // If location permission is already granted, use a fresh GPS position
-    // as the Maps origin. Otherwise, open Maps using its normal current-location behavior.
-    if (!navigator.permissions || !navigator.geolocation) {
-      openMaps();
-      return;
-    }
-
-    navigator.permissions
-      .query({ name: "geolocation" })
-      .then((permission) => {
-        if (permission.state !== "granted") {
-          openMaps();
-          return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-          ({ coords }) => {
-            openMaps(`${coords.latitude},${coords.longitude}`);
-          },
-          () => {
-            openMaps();
-          },
-          {
-            enableHighAccuracy: true,
-            timeout: 15000,
-            maximumAge: 0,
-          }
-        );
-      })
-      .catch(() => {
-        openMaps();
-      });
   }
 
   /* -------------------------------------------------------
