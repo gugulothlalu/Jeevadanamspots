@@ -23,7 +23,58 @@ const categories = [
 
 
 
-const today = () => new Date().toISOString().slice(0, 10);
+const today = () => {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+
+const FIND_HELP_TEXT = {
+  en: {
+    title: "Find Help",
+    desc: "Choose a category or use the filters to find community support.",
+  },
+  te: {
+    title: "సహాయం కనుగొనండి",
+    desc: "కమ్యూనిటీ సహాయం కోసం ఒక కేటగిరీని ఎంచుకోండి లేదా ఫిల్టర్లను ఉపయోగించండి.",
+  },
+  hi: {
+    title: "मदद खोजें",
+    desc: "कम्युनिटी मदद पाने के लिए कैटेगरी चुनें या फ़िल्टर इस्तेमाल करें।",
+  },
+  ta: {
+    title: "உதவியைத் தேடுங்கள்",
+    desc: "சமூக உதவியை கண்டறிய ஒரு வகையைத் தேர்வு செய்யவும் அல்லது filters பயன்படுத்தவும்.",
+  },
+  kn: {
+    title: "ಸಹಾಯ ಹುಡುಕಿ",
+    desc: "ಸಮುದಾಯ ಸಹಾಯವನ್ನು ಹುಡುಕಲು ವರ್ಗವನ್ನು ಆಯ್ಕೆಮಾಡಿ ಅಥವಾ filters ಬಳಸಿ.",
+  },
+  bn: {
+    title: "সাহায্য খুঁজুন",
+    desc: "কমিউনিটি সাহায্য খুঁজতে একটি ক্যাটাগরি বেছে নিন বা ফিল্টার ব্যবহার করুন।",
+  },
+  ur: {
+    title: "مدد تلاش کریں",
+    desc: "کمیونٹی مدد تلاش کرنے کے لیے زمرہ منتخب کریں یا filters استعمال کریں۔",
+  },
+  mr: {
+    title: "मदत शोधा",
+    desc: "कम्युनिटी मदत शोधण्यासाठी श्रेणी निवडा किंवा filters वापरा.",
+  },
+  ml: {
+    title: "സഹായം കണ്ടെത്തുക",
+    desc: "കമ്മ്യൂണിറ്റി സഹായം കണ്ടെത്താൻ ഒരു വിഭാഗം തിരഞ്ഞെടുക്കുക അല്ലെങ്കിൽ filters ഉപയോഗിക്കുക.",
+  },
+  bho: {
+    title: "मदद खोजीं",
+    desc: "कम्युनिटी मदद खोजे खातिर एगो श्रेणी चुनीं या filters के इस्तेमाल करीं।",
+  },
+};
+
 
 const initialForm = {
   title: "",
@@ -48,6 +99,30 @@ function formatTime(time) {
     2,
     "0"
   )} ${suffix}`;
+}
+
+function formatServiceSchedule(service) {
+  if (!service?.date) return "";
+
+  const [year, month, day] = service.date.split("-").map(Number);
+  const serviceDate = new Date(year, month - 1, day);
+  const todayDate = new Date();
+  todayDate.setHours(0, 0, 0, 0);
+
+  const isToday = serviceDate.getTime() === todayDate.getTime();
+
+  const dateLabel = isToday
+    ? "Today"
+    : serviceDate.toLocaleDateString("en-IN", {
+        day: "numeric",
+        month: "short",
+      });
+
+  const start = formatTime(service.start);
+  const end = formatTime(service.end);
+  const timeLabel = start && end ? `${start} – ${end}` : start || end;
+
+  return timeLabel ? `${dateLabel} • ${timeLabel}` : dateLabel;
 }
 
 function isServiceActive(service) {
@@ -100,6 +175,39 @@ function getServiceStatus(service) {
   }
 
   return "completed";
+}
+
+function getDistanceKm(latitude1, longitude1, latitude2, longitude2) {
+  const lat1 = Number(latitude1);
+  const lon1 = Number(longitude1);
+  const lat2 = Number(latitude2);
+  const lon2 = Number(longitude2);
+
+  if (![lat1, lon1, lat2, lon2].every(Number.isFinite)) {
+    return null;
+  }
+
+  const earthRadiusKm = 6371;
+  const toRadians = (value) => (value * Math.PI) / 180;
+  const dLat = toRadians(lat2 - lat1);
+  const dLon = toRadians(lon2 - lon1);
+
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRadians(lat1)) *
+      Math.cos(toRadians(lat2)) *
+      Math.sin(dLon / 2) ** 2;
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return earthRadiusKm * c;
+}
+
+function formatDistanceKm(distanceKm) {
+  if (!Number.isFinite(distanceKm)) return "";
+  if (distanceKm < 1) {
+    return `${Math.round(distanceKm * 1000)} m away`;
+  }
+  return `${distanceKm.toFixed(1)} km away`;
 }
 
 
@@ -433,6 +541,20 @@ const JEEVADANAM_LANGUAGES = [
 ];
 
 function App() {
+  const [showJeevadanamIntro, setShowJeevadanamIntro] = useState(true);
+
+  // Refresh service status automatically so Upcoming -> Active Now -> Completed
+  // changes according to the real date/time even while the page stays open.
+  const [serviceStatusTick, setServiceStatusTick] = useState(0);
+  useEffect(() => {
+  if (showJeevadanamIntro) return;
+
+  const statusTimer = window.setInterval(() => {
+    setServiceStatusTick((value) => value + 1);
+  }, 30000);
+
+  return () => window.clearInterval(statusTimer);
+}, [showJeevadanamIntro]);
   // WEBSITE LANGUAGE: controls only the Jeevadanam site UI. Never sync this with aiLanguage.
   const [siteLanguage, setSiteLanguage] = useState(() => {
     try {
@@ -629,7 +751,30 @@ function App() {
   const [activeCategory, setActiveCategory] =
     useState("All Services");
 
+  const [categoryDropdownOpen, setCategoryDropdownOpen] =
+    useState(false);
+
+  useEffect(() => {
+    if (!categoryDropdownOpen) return;
+
+    const closeCategoryDropdown = (event) => {
+      const dropdown = event.target.closest?.(".service-category-dropdown");
+      if (!dropdown) {
+        setCategoryDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", closeCategoryDropdown);
+    return () => {
+      document.removeEventListener("pointerdown", closeCategoryDropdown);
+    };
+  }, [categoryDropdownOpen]);
+
   const [filter, setFilter] = useState("all");
+
+  // Viewer location used only by the Near Me feed filter.
+  // This is separate from the location stored for a shared community service.
+  const [currentUserLocation, setCurrentUserLocation] = useState(null);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState(initialForm);
@@ -642,6 +787,8 @@ function App() {
     useState("");
 
   const [selected, setSelected] = useState(null);
+
+  
 
   /*
     -------------------------------------------------------
@@ -867,27 +1014,47 @@ function App() {
   const filteredServices = useMemo(() => {
     const query = search.trim().toLowerCase();
 
-    return allServices.filter((service) => {
+    const filtered = allServices.filter((service) => {
       /*
         Automatically hide completed services
       */
-      const status =
-        getServiceStatus(service);
+      const status = getServiceStatus(service);
 
       if (status === "completed") {
         return false;
       }
 
-      const matchesSearch = [
-        service.title,
-        service.category,
-        service.area,
-        service.address,
-        service.notes,
-      ]
-        .join(" ")
-        .toLowerCase()
-        .includes(query);
+      // Near Me is a location filter, not a text search.
+      if (filter === "near") {
+        if (!currentUserLocation) return false;
+
+        const distanceKm = getDistanceKm(
+          currentUserLocation.latitude,
+          currentUserLocation.longitude,
+          service.latitude,
+          service.longitude
+        );
+
+        // Services without saved coordinates cannot be placed on the Near Me feed.
+        // Keep the radius practical for a local community-service directory.
+        if (distanceKm === null || distanceKm > 25) {
+          return false;
+        }
+      }
+
+      const matchesSearch =
+        filter === "near"
+          ? true
+          : [
+              service.title,
+              service.category,
+              service.area,
+              service.address,
+              service.notes,
+            ]
+              .join(" ")
+              .toLowerCase()
+              .includes(query);
 
       const matchesCategory =
         activeCategory === "All Services" ||
@@ -905,27 +1072,63 @@ function App() {
         filter !== "upcoming" ||
         status === "upcoming";
 
-      /*
-        Near Me currently keeps the existing
-        search/location behavior.
-      */
-      const matchesNear =
-        filter !== "near" || true;
-
       return (
         matchesSearch &&
         matchesCategory &&
         matchesDate &&
         matchesActive &&
-        matchesUpcoming &&
-        matchesNear
+        matchesUpcoming
       );
+    });
+
+    if (filter === "near" && currentUserLocation) {
+      return [...filtered].sort((a, b) => {
+        const distanceA = getDistanceKm(
+          currentUserLocation.latitude,
+          currentUserLocation.longitude,
+          a.latitude,
+          a.longitude
+        );
+        const distanceB = getDistanceKm(
+          currentUserLocation.latitude,
+          currentUserLocation.longitude,
+          b.latitude,
+          b.longitude
+        );
+
+        return (distanceA ?? Infinity) - (distanceB ?? Infinity);
+      });
+    }
+
+    // Keep Active Now services above Upcoming services.
+    // Status is calculated from the current date/time and refreshed automatically.
+    // Within each status, keep the earliest scheduled service first.
+    return [...filtered].sort((a, b) => {
+      const statusRank = {
+        active: 0,
+        upcoming: 1,
+        completed: 2,
+      };
+
+      const rankA = statusRank[getServiceStatus(a)] ?? 3;
+      const rankB = statusRank[getServiceStatus(b)] ?? 3;
+
+      if (rankA !== rankB) {
+        return rankA - rankB;
+      }
+
+      const scheduleA = `${a.date || ""}T${a.start || "00:00"}`;
+      const scheduleB = `${b.date || ""}T${b.start || "00:00"}`;
+
+      return scheduleA.localeCompare(scheduleB);
     });
   }, [
     allServices,
     search,
     activeCategory,
     filter,
+    currentUserLocation,
+    serviceStatusTick,
   ]);
 
   /*
@@ -937,6 +1140,7 @@ function App() {
     setSearch("");
     setActiveCategory("All Services");
     setFilter("all");
+    setCurrentUserLocation(null);
   }
 
   /*
@@ -1069,12 +1273,12 @@ function App() {
     setError("");
 
     if (
-      !form.title.trim() ||
       !form.area.trim() ||
       !form.address.trim() ||
       !form.date ||
       !form.start ||
-      !form.end
+      !form.end ||
+      !form.notes.trim()
     ) {
       setError(
         "Please complete all required fields."
@@ -1103,7 +1307,7 @@ function App() {
     } = await supabase
       .from("services")
       .insert({
-        title: form.title.trim(),
+        title: form.title.trim() || form.category,
         description: form.notes.trim(),
         category: form.category,
         area: form.area.trim(),
@@ -1130,6 +1334,8 @@ function App() {
 
       area: form.area.trim(),
 
+      title: form.title.trim() || form.category,
+
       date: form.date,
 
       start: form.start,
@@ -1155,6 +1361,7 @@ function App() {
     setSearch("");
     setActiveCategory("All Services");
     setFilter("all");
+    setCurrentUserLocation(null);
   }
 
   /*
@@ -1172,13 +1379,20 @@ function App() {
 
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
-        const query = `${coords.latitude},${coords.longitude}`;
+        setCurrentUserLocation({
+          latitude: coords.latitude,
+          longitude: coords.longitude,
+        });
 
-        setSearch(query);
+        // Near Me filters the existing Jeevadanam feed.
+        // It must not open Google Maps and it must not turn GPS coordinates into a search query.
+        setSearch("");
         setFilter("near");
       },
 
       () => {
+        setCurrentUserLocation(null);
+        setFilter("all");
         alert(
           "Location permission was not granted."
         );
@@ -1205,6 +1419,8 @@ function App() {
       return;
     }
 
+    // Directions opens Google Maps directly in a NEW TAB.
+    // Jeevadanam stays open in the current tab.
     let destination = address || "";
 
     if (
@@ -1243,6 +1459,56 @@ function App() {
         maximumAge: 60000,
       }
     );
+    if (!destination) {
+      alert("This service does not have a valid location.");
+      return;
+    }
+
+    const openMaps = (origin = "") => {
+      const url =
+        `https://www.google.com/maps/dir/?api=1` +
+        (origin
+          ? `&origin=${encodeURIComponent(origin)}`
+          : "") +
+        `&destination=${encodeURIComponent(destination)}` +
+        `&travelmode=driving`;
+
+      window.open(url, "_blank", "noopener,noreferrer");
+    };
+
+    // Do not change the existing location-permission flow.
+    // If location permission is already granted, use a fresh GPS position
+    // as the Maps origin. Otherwise, open Maps using its normal current-location behavior.
+    if (!navigator.permissions || !navigator.geolocation) {
+      openMaps();
+      return;
+    }
+
+    navigator.permissions
+      .query({ name: "geolocation" })
+      .then((permission) => {
+        if (permission.state !== "granted") {
+          openMaps();
+          return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+          ({ coords }) => {
+            openMaps(`${coords.latitude},${coords.longitude}`);
+          },
+          () => {
+            openMaps();
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 15000,
+            maximumAge: 0,
+          }
+        );
+      })
+      .catch(() => {
+        openMaps();
+      });
   }
 
   /* -------------------------------------------------------
@@ -1259,6 +1525,24 @@ function App() {
     }
   });
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const languageMenuRef = useRef(null);
+
+  // Close the website-language dropdown when the user taps/clicks anywhere outside it.
+  useEffect(() => {
+    if (!languageMenuOpen) return;
+
+    const handleOutsideLanguageClick = (event) => {
+      if (!languageMenuRef.current?.contains(event.target)) {
+        setLanguageMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handleOutsideLanguageClick);
+    return () => {
+      document.removeEventListener("pointerdown", handleOutsideLanguageClick);
+    };
+  }, [languageMenuOpen]);
   const [aiInput, setAiInput] = useState("");
   const [aiTyping, setAiTyping] = useState(false);
   const [aiThinkMode, setAiThinkMode] = useState(false);
@@ -2054,7 +2338,30 @@ function App() {
     );
 
   return (
-    <div className="app">
+    <>
+      {showJeevadanamIntro && (
+        <div className="jeevadanam-intro" role="status" aria-label="Opening Jeevadanam">
+          <video
+            className="jeevadanam-intro-video"
+           autoPlay
+  muted
+  playsInline
+  onLoadedMetadata={(e) => {
+    e.currentTarget.playbackRate = 2.0;
+  }}
+  onEnded={() => setShowJeevadanamIntro(false)}
+            onError={() => setShowJeevadanamIntro(false)}
+            aria-label="Jeevadanam 3D opening animation"
+          >
+            <source
+              src="/jeevadanam-opening-8s.mp4"
+              type="video/mp4"
+            />
+          </video>
+        </div>
+      )}
+
+      <div className="app">
 
       <style>{`
         @keyframes jeevadanamAiRingSpin {
@@ -2139,8 +2446,50 @@ function App() {
           HEADER
       ===================================================== */}
 
-      <header className="header">
-        <div className="brand">
+      <header
+        className="header"
+        style={{
+          justifyContent: "flex-start",
+          alignItems: "center",
+          gap: 0,
+          columnGap: 0,
+          paddingLeft: 16,
+          paddingRight: 16,
+        }}
+      >
+        {/* Drawer menu — kept on the left side of the app bar */}
+        <button
+          type="button"
+          className="social-icon jeevadanam-menu-left"
+          onClick={() => {
+            setLanguageMenuOpen(false);
+            setDrawerOpen(true);
+          }}
+          aria-label="Open menu"
+          title="Menu"
+          style={{
+            width: 56,
+            height: 52,
+            flex: "0 0 56px",
+            gap: 0,
+            fontSize: 22,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span aria-hidden="true">☰</span>
+        </button>
+
+        <div
+          className="brand"
+          style={{
+            flex: "0 1 auto",
+            minWidth: 0,
+            marginLeft: 0,
+            gap: 10,
+          }}
+        >
           <div className="brand-icon">
             💛
           </div>
@@ -2156,73 +2505,12 @@ function App() {
           </div>
         </div>
 
-        <div className="header-actions">
-
-          {/* Language selector */}
-          <div style={{ position: "relative" }}>
-            <button
-              type="button"
-              onClick={() => setLanguageMenuOpen((open) => !open)}
-              className="social-icon"
-              aria-label="Choose language"
-              title="Choose language"
-              style={{
-                width: 52,
-                height: 52,
-                gap: 0,
-                fontSize: 13,
-                fontWeight: 700,
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <span aria-hidden="true" style={{ fontSize: 20 }}>🌐</span>
-            </button>
-
-            {languageMenuOpen && (
-              <div
-                role="menu"
-                style={{
-                  position: "absolute",
-                  top: "calc(100% + 10px)",
-                  right: 0,
-                  width: 190,
-                  maxHeight: 430,
-                  overflowY: "auto",
-                  background: "#fff",
-                  border: "1px solid #e3e8ef",
-                  borderRadius: 16,
-                  boxShadow: "0 18px 45px rgba(15,23,42,.16)",
-                  padding: 8,
-                  zIndex: 3000,
-                }}
-              >
-                {JEEVADANAM_LANGUAGES.map(([code, label]) => (
-                  <button
-                    key={code}
-                    type="button"
-                    role="menuitem"
-                    onClick={() => changeSiteLanguage(code)}
-                    style={{
-                      width: "100%",
-                      border: 0,
-                      borderRadius: 10,
-                      padding: "10px 12px",
-                      background: siteLanguage === code ? "#eef8f1" : "transparent",
-                      color: siteLanguage === code ? "#1f7a4d" : "#243047",
-                      textAlign: "left",
-                      cursor: "pointer",
-                      fontSize: 15,
-                      fontWeight: siteLanguage === code ? 750 : 500,
-                    }}
-                  >
-                    {label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+        <div
+          className="header-actions"
+          style={{
+            marginLeft: "auto",
+          }}
+        >
 
           {/* Instagram */}
           <a
@@ -2266,95 +2554,408 @@ function App() {
             </svg>
           </a>
 
-          {/* Mail */}
-          <a
-            href="mailto:jeevadanamspots@gmail.com"
-            className="social-icon"
-            aria-label="Email"
-            title="Email"
-          >
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
+
+          {/* Language selector */}
+          <div ref={languageMenuRef} style={{ position: "relative" }}>
+            <button
+              type="button"
+              onClick={() => {
+                setDrawerOpen(false);
+                setLanguageMenuOpen((open) => !open);
+              }}
+              className="social-icon"
+              aria-label="Choose language"
+              title="Choose language"
+              style={{
+                width: 52,
+                height: 52,
+                gap: 0,
+                fontSize: 13,
+                fontWeight: 700,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              <rect
-                x="3"
-                y="5"
-                width="18"
-                height="14"
-                rx="2"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
+              <span aria-hidden="true" style={{ fontSize: 20 }}>🌐</span>
+            </button>
 
-              <path
-                d="M3 7l9 7 9-7"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-              />
-            </svg>
-          </a>
-
-          {/* Share */}
-          <button
-            type="button"
-            className="primary-button add-button"
-            onClick={openForm}
-          >
-            <span>＋</span>
-          </button>
+            {languageMenuOpen && (
+              <div
+                role="menu"
+                style={{
+                  position: "fixed",
+                  top: "76px",
+                  right: "12px",
+                  width: "min(190px, calc(100vw - 24px))",
+                  maxHeight: "calc(100vh - 92px)",
+                  overflowY: "auto",
+                  background: "#fff",
+                  border: "1px solid #e3e8ef",
+                  borderRadius: 16,
+                  boxShadow: "0 18px 45px rgba(15,23,42,.16)",
+                  padding: 8,
+                  zIndex: 3000,
+                }}
+              >
+                {JEEVADANAM_LANGUAGES.map(([code, label]) => (
+                  <button
+                    key={code}
+                    type="button"
+                    role="menuitem"
+                    onClick={() => changeSiteLanguage(code)}
+                    style={{
+                      width: "100%",
+                      border: 0,
+                      borderRadius: 10,
+                      padding: "10px 12px",
+                      background: siteLanguage === code ? "#eef8f1" : "transparent",
+                      color: siteLanguage === code ? "#1f7a4d" : "#243047",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      fontSize: 15,
+                      fontWeight: siteLanguage === code ? 750 : 500,
+                    }}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
-
       {/* =====================================================
-          MAIN
+          DRAWER MENU
       ===================================================== */}
-
-      <main>
-
-        {/* HERO */}
-        <section className="hero">
-          <div className="hero-copy">
-
-            <span className="eyebrow">
-              {siteT("eyebrow")}
-            </span>
-
-            <h2>
-              {siteT("title1")}
-              <br />
-              {siteT("title2")}
-            </h2>
-
-            <p>
-              {siteT("desc")}
-            </p>
-
-            <button
-              className="hero-button"
-              onClick={openForm}
-            >
-              {siteT("share")}
-            </button>
-          </div>
-
-          <div
-            className="hero-art"
-            aria-hidden="true"
+      {drawerOpen && (
+        <div
+          className="jeevadanam-drawer-layer"
+          role="presentation"
+          onClick={() => setDrawerOpen(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 5000,
+            background: "rgba(15, 23, 42, 0.32)",
+          }}
+        >
+          <aside
+            className="jeevadanam-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Jeevadanam menu"
+            onClick={(event) => event.stopPropagation()}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              bottom: 0,
+              width: "min(360px, 88vw)",
+              background: "#ffffff",
+              boxShadow: "18px 0 50px rgba(15, 23, 42, 0.18)",
+              padding: "22px 18px 24px",
+              overflowY: "auto",
+            }}
           >
-            <span>🤝</span>
-            <span>💛</span>
-            <span>🌱</span>
-          </div>
-        </section>
-        {/* =====================================================
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 12,
+                padding: "4px 4px 20px",
+                borderBottom: "1px solid #edf1f5",
+              }}
+            >
+              <div>
+                <div style={{
+                  fontSize: 22,
+                  fontWeight: 850,
+                  color: "#064e3b",
+                  letterSpacing: "-0.02em",
+                }}>
+                  Jeevadanam
+                </div>
+                <div style={{
+                  marginTop: 3,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: "#7b8798",
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                }}>
+                  Open Community
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setDrawerOpen(false)}
+                aria-label="Close menu"
+                title="Close"
+                style={{
+                  width: 42,
+                  height: 42,
+                  border: "1px solid #e5e9ef",
+                  borderRadius: 12,
+                  background: "#ffffff",
+                  color: "#243047",
+                  fontSize: 22,
+                  cursor: "pointer",
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            <nav
+              aria-label="Jeevadanam navigation"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+                paddingTop: 18,
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setDrawerOpen(false);
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
+                style={{
+                  width: "100%",
+                  border: 0,
+                  borderRadius: 13,
+                  background: "#f7faf8",
+                  color: "#17233a",
+                  padding: "13px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 13,
+                  textAlign: "left",
+                  fontSize: 15,
+                  fontWeight: 750,
+                  cursor: "pointer",
+                }}
+              >
+                <span style={{ fontSize: 20 }}>🏠</span>
+                <span>Home</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setDrawerOpen(false);
+                  document.querySelector(".services-section")?.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  });
+                }}
+                style={{
+                  width: "100%",
+                  border: 0,
+                  borderRadius: 13,
+                  background: "transparent",
+                  color: "#17233a",
+                  padding: "13px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 13,
+                  textAlign: "left",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                <span style={{ fontSize: 20 }}>🔎</span>
+                <span>Find Help</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setDrawerOpen(false);
+                  openForm();
+                }}
+                style={{
+                  width: "100%",
+                  border: 0,
+                  borderRadius: 13,
+                  background: "transparent",
+                  color: "#17233a",
+                  padding: "13px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 13,
+                  textAlign: "left",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                <span style={{ fontSize: 20 }}>➕</span>
+                <span>Share a Service</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setDrawerOpen(false);
+                  setAiOpen(true);
+                }}
+                style={{
+                  width: "100%",
+                  border: 0,
+                  borderRadius: 13,
+                  background: "transparent",
+                  color: "#17233a",
+                  padding: "13px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 13,
+                  textAlign: "left",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                <span style={{ fontSize: 20 }}>🤖</span>
+                <span>Jeevadanam AI</span>
+              </button>
+
+              <div style={{
+                height: 1,
+                background: "#edf1f5",
+                margin: "14px 4px 8px",
+              }} />
+
+              <div style={{
+                padding: "0 14px 5px",
+                color: "#9a6a12",
+                fontSize: 11,
+                fontWeight: 850,
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+              }}>
+                Support
+              </div>
+
+              <a
+                href="mailto:jeevadanamspots@gmail.com"
+                onClick={() => setDrawerOpen(false)}
+                style={{
+                  width: "100%",
+                  boxSizing: "border-box",
+                  borderRadius: 13,
+                  color: "#17233a",
+                  padding: "13px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 13,
+                  textDecoration: "none",
+                  fontSize: 15,
+                  fontWeight: 700,
+                }}
+              >
+                <span style={{ fontSize: 20 }}>✉️</span>
+                <span>Contact</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setDrawerOpen(false);
+                  setAiOpen(true);
+                  setAiInput("privacy");
+                }}
+                style={{
+                  width: "100%",
+                  border: 0,
+                  borderRadius: 13,
+                  background: "transparent",
+                  color: "#17233a",
+                  padding: "13px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 13,
+                  textAlign: "left",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                <span style={{ fontSize: 20 }}>🔒</span>
+                <span>Privacy</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setDrawerOpen(false);
+                  setLanguageMenuOpen(true);
+                }}
+                style={{
+                  width: "100%",
+                  border: 0,
+                  borderRadius: 13,
+                  background: "transparent",
+                  color: "#17233a",
+                  padding: "13px 14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 13,
+                  textAlign: "left",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                <span style={{ fontSize: 20 }}>⚙️</span>
+                <span>Settings</span>
+              </button>
+            </nav>
+
+            <div
+              style={{
+                height: 1,
+                background: "#edf1f5",
+                margin: "18px 4px 2px",
+              }}
+            />
+
+                    {/* =====================================================
     HOW JEEVADANAM WORKS
 ===================================================== */}
 
-<section className="how-it-works">
+<div
+  className="drawer-how-content"
+  style={{
+    marginTop: "18px",
+    paddingBottom: "12px",
+  }}
+>
+  <style>{`
+    .jeevadanam-drawer .drawer-how-content .how-heading {
+      margin-bottom: 18px !important;
+    }
+    .jeevadanam-drawer .drawer-how-content .how-columns {
+      grid-template-columns: 1fr !important;
+      gap: 14px !important;
+    }
+    .jeevadanam-drawer .drawer-how-content .how-card {
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .jeevadanam-drawer .drawer-how-content .how-step p {
+      margin-bottom: 0 !important;
+    }
+    .jeevadanam-drawer .drawer-how-content .jeevadanam-ai-helper {
+      margin-top: 14px !important;
+    }
+  `}</style>
 
   <div className="how-heading">
     <span className="how-eyebrow">
@@ -2589,9 +3190,55 @@ function App() {
     </button>
   </div>
 
-</section>
+</div>
 
 
+
+          </aside>
+        </div>
+      )}
+
+      {/* =====================================================
+          MAIN
+      ===================================================== */}
+
+      <main>
+
+        {/* HERO */}
+        <section className="hero">
+          <div className="hero-copy">
+
+            <span className="eyebrow">
+              {siteT("eyebrow")}
+            </span>
+
+            <h2>
+              {siteT("title1")}
+              <br />
+              {siteT("title2")}
+            </h2>
+
+            <p>
+              {siteT("desc")}
+            </p>
+
+            <button
+              className="hero-button"
+              onClick={openForm}
+            >
+              {siteT("share")}
+            </button>
+          </div>
+
+          <div
+            className="hero-art"
+            aria-hidden="true"
+          >
+            <span>🤝</span>
+            <span>💛</span>
+            <span>🌱</span>
+          </div>
+        </section>
         {/* PRIVACY */}
         <section className="privacy-banner">
           <span className="privacy-icon">
@@ -2615,204 +3262,295 @@ function App() {
         {/* SERVICES */}
         <section className="services-section">
 
-          <div className="section-heading">
-            <div>
-              <h2>
-                Community Services
-              </h2>
-
-              <p>
-                Discover help and opportunities
-                around India.
-              </p>
-            </div>
-
-            <span className="count-badge">
-              {filteredServices.length} results
-            </span>
-          </div>
-
-
-          {/* SEARCH */}
-          <label className="search-box">
-            <span>⌕</span>
-
-            <input
-              value={search}
-              onChange={(event) =>
-                setSearch(
-                  event.target.value
-                )
-              }
-              placeholder="Search service, area or landmark..."
-              aria-label="Search community services"
-            />
-
-            {search && (
-              <button
-                type="button"
-                onClick={() =>
-                  setSearch("")
-                }
-                aria-label="Clear search"
-              >
-                ×
-              </button>
-            )}
-          </label>
-
-
-          {/* FILTERS */}
-          <div className="filters">
-
-            <button
-              className={
-                filter === "all"
-                  ? "filter active"
-                  : "filter"
-              }
-              onClick={() =>
-                setFilter("all")
-              }
+          {/* FIND HELP */}
+          <section className="find-help-section">
+            <div
+              className="section-heading"
+              style={{
+                display: "block",
+              }}
             >
-              {siteT("all")} ({allServices.length})
-            </button>
-
-            <button
-              className={
-                filter === "today"
-                  ? "filter active"
-                  : "filter"
-              }
-              onClick={() =>
-                setFilter("today")
-              }
-            >
-              {siteT("today")}
-            </button>
-
-            <button
-              className={
-                filter === "active"
-                  ? "filter active"
-                  : "filter"
-              }
-              onClick={() =>
-                setFilter("active")
-              }
-            >
-              {siteT("active")} (
-              {
-                allServices.filter(
-                  isServiceActive
-                ).length
-              }
-              )
-            </button>
-
-            <button
-              className={
-                filter === "near"
-                  ? "filter active"
-                  : "filter"
-              }
-              onClick={useMyLocation}
-            >
-              {siteT("near")}
-            </button>
-
-          </div>
-
-
-          {/* CATEGORIES */}
-          <div className="category-grid">
-
-            {categories.map(
-              (category) => (
-                <button
-                  key={category.name}
-                  className={
-                    activeCategory ===
-                    category.name
-                      ? "category-card selected"
-                      : "category-card"
-                  }
-                  onClick={() =>
-                    setActiveCategory(
-                      category.name
-                    )
-                  }
+              <div>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    gap: 8,
+                    flexWrap: "nowrap",
+                    whiteSpace: "nowrap",
+                  }}
                 >
-                  <span className="category-icon">
-                    {category.icon}
-                  </span>
+                  <h2 style={{ margin: 0 }}>
+                    {FIND_HELP_TEXT[siteLanguage]?.title ||
+                      FIND_HELP_TEXT.en.title}
+                  </h2>
 
-                  <span>
-                    {siteCategory(category.name)}
-                  </span>
-                </button>
-              )
-            )}
-
-          </div>
-
-
-          {/* RESULTS HEADING */}
-          <div className="results-heading">
-
-            <h3>
-              {activeCategory ===
-              "All Services"
-                ? siteT("results")
-                : siteCategory(activeCategory)}
-            </h3>
-
-            <span className="live-badge">
-              <span />
-              {siteT("feed")}
-            </span>
-
-          </div>
-
-
-          {/* LOADING */}
-          {loadingServices && (
-            <div className="empty-state">
-              <div className="empty-icon">
-                ⏳
-              </div>
-
-              <h3>
-                Loading services...
-              </h3>
-            </div>
-          )}
-
-
-          {/* ERROR */}
-          {!loadingServices &&
-            servicesError && (
-              <div className="empty-state">
-                <div className="empty-icon">
-                  ⚠️
+                  {/* NEAR ME — immediately beside Find Help */}
+                  <button
+                    type="button"
+                    className={
+                      filter === "near"
+                        ? "filter near-me-button active"
+                        : "filter near-me-button"
+                    }
+                    onClick={useMyLocation}
+                    style={{
+                      minWidth: 96,
+                      minHeight: 38,
+                      padding: "0 12px",
+                      borderRadius: 999,
+                      fontSize: 13,
+                      fontWeight: 750,
+                      flexShrink: 0,
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    <span className="near-me-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z" />
+                        <circle cx="12" cy="9" r="2.5" />
+                      </svg>
+                    </span>
+                    <span>{siteT("near").replace(/^📍\s*/, "")}</span>
+                  </button>
                 </div>
 
-                <h3>
-                  Unable to load services
-                </h3>
-
                 <p>
-                  {servicesError}
+                  {FIND_HELP_TEXT[siteLanguage]?.desc ||
+                    FIND_HELP_TEXT.en.desc}
                 </p>
-
-                <button
-                  className="outline-button"
-                  onClick={loadServices}
-                >
-                  Try Again
-                </button>
               </div>
-            )}
+            </div>
+
+
+            {/* FILTERS */}
+            <div className="filters">
+
+              <button
+                className={
+                  filter === "all"
+                    ? "filter active"
+                    : "filter"
+                }
+                onClick={() =>
+                  setFilter("all")
+                }
+              >
+                {siteT("all")} ({allServices.length})
+              </button>
+
+              <button
+                className={
+                  filter === "today"
+                    ? "filter active"
+                    : "filter"
+                }
+                onClick={() =>
+                  setFilter("today")
+                }
+              >
+                {siteT("today")}
+              </button>
+
+              <button
+                className={
+                  filter === "active"
+                    ? "filter active"
+                    : "filter"
+                }
+                onClick={() =>
+                  setFilter("active")
+                }
+              >
+                {siteT("active")} (
+                {
+                  allServices.filter(
+                    isServiceActive
+                  ).length
+                }
+                )
+              </button>
+
+            </div>
+
+            {/* SERVICE CATEGORY DROPDOWN */}
+            <div
+              className="service-category-dropdown"
+              onPointerDown={(event) => event.stopPropagation()}
+              style={{
+                position: "relative",
+                width: "100%",
+                marginTop: 18,
+                zIndex: 20,
+              }}
+            >
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: 8,
+                  fontSize: 15,
+                  fontWeight: 750,
+                  color: "#17233a",
+                }}
+              >
+                Service category <span style={{ color: "#ef4444" }}>*</span>
+              </label>
+
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={categoryDropdownOpen}
+                onClick={() =>
+                  setCategoryDropdownOpen((open) => !open)
+                }
+                style={{
+                  width: "100%",
+                  minHeight: 58,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 12,
+                  padding: "10px 16px",
+                  border: categoryDropdownOpen
+                    ? "2px solid #f59e0b"
+                    : "1px solid #dbe3ec",
+                  borderRadius: 14,
+                  background: "#ffffff",
+                  color: "#17233a",
+                  boxShadow: categoryDropdownOpen
+                    ? "0 0 0 3px rgba(245, 158, 11, 0.10)"
+                    : "0 4px 14px rgba(15, 23, 42, 0.04)",
+                  cursor: "pointer",
+                  textAlign: "left",
+                  fontSize: 16,
+                  fontWeight: 650,
+                }}
+              >
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 12,
+                    minWidth: 0,
+                  }}
+                >
+                  <span
+                    aria-hidden="true"
+                    style={{
+                      fontSize: 23,
+                      lineHeight: 1,
+                      flex: "0 0 auto",
+                    }}
+                  >
+                    {categories.find(
+                      (item) => item.name === activeCategory
+                    )?.icon || "🌍"}
+                  </span>
+                  <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {activeCategory === "All Services"
+                      ? "Show All Communities"
+                      : activeCategory}
+                  </span>
+                </span>
+
+                <span
+                  aria-hidden="true"
+                  style={{
+                    fontSize: 20,
+                    lineHeight: 1,
+                    transform: categoryDropdownOpen
+                      ? "rotate(180deg)"
+                      : "rotate(0deg)",
+                    transition: "transform 160ms ease",
+                  }}
+                >
+                 ⌄
+                </span>
+              </button>
+
+              {categoryDropdownOpen && (
+                <div
+                  role="listbox"
+                  aria-label="Service category"
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    top: "100%",
+                    marginTop: 6,
+                    padding: 8,
+                    background: "#ffffff",
+                    border: "1px solid #e1e8f0",
+                    borderRadius: 14,
+                    boxShadow: "0 18px 40px rgba(15, 23, 42, 0.14)",
+                    maxHeight: 430,
+                    overflowY: "auto",
+                  }}
+                >
+                  {categories.map((category) => {
+                    const selectedCategory =
+                      activeCategory === category.name;
+
+                    return (
+                      <button
+                        key={category.name}
+                        type="button"
+                        role="option"
+                        aria-selected={selectedCategory}
+                        onClick={() => {
+                          setActiveCategory(category.name);
+                          setCategoryDropdownOpen(false);
+                        }}
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 13,
+                          padding: "11px 12px",
+                          border: 0,
+                          borderRadius: 10,
+                          background: selectedCategory
+                            ? "#fff5df"
+                            : "#ffffff",
+                          color: selectedCategory
+                            ? "#b65f00"
+                            : "#17233a",
+                          fontSize: 15,
+                          fontWeight: selectedCategory ? 750 : 600,
+                          cursor: "pointer",
+                          textAlign: "left",
+                        }}
+                      >
+                        <span
+                          aria-hidden="true"
+                          style={{
+                            width: 32,
+                            flex: "0 0 32px",
+                            fontSize: 21,
+                            lineHeight: 1,
+                            textAlign: "center",
+                          }}
+                        >
+                          {category.icon}
+                        </span>
+
+                        <span>
+                          {category.name === "All Services"
+                            ? "Show All Communities"
+                            : category.name}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+          </section>
 
 
           {/* SERVICE CARDS */}
@@ -2870,65 +3608,94 @@ function App() {
                             {siteCategory(service.category)}
                           </span>
 
-                          <span className="local-badge">
-  Community
-</span>
-
-                        </div>
-
-
-                        {/* TITLE */}
-                        <div className="service-title-row">
-
-                          <h3>
-                            {service.title}
-                          </h3>
-
-                          {getServiceStatus(
-                            service
-                          ) === "active" && (
-                            <span className="active-badge">
-                              ● Active Now
-                            </span>
-                          )}
-
-                          {getServiceStatus(
-                            service
-                          ) === "upcoming" && (
-                            <span className="upcoming-badge">
+                          {getServiceStatus(service) === "upcoming" && (
+                            <span className="upcoming-badge card-top-status">
                               ◷ Upcoming
                             </span>
                           )}
 
+                          {getServiceStatus(service) === "active" && (
+                            <span className="active-badge card-top-status">
+                              ● Active Now
+                            </span>
+                          )}
+
                         </div>
 
 
-                        {/* NOTES */}
-                        <p className="service-notes">
-                          {service.notes ||
-                            "Community service information."}
-                        </p>
+                        {/* DATE + TIME */}
+                        <div className="service-title-row service-schedule-row">
+
+                          <h3 className="service-schedule">
+                            <span className="service-schedule-icon" aria-hidden="true">
+                              <svg viewBox="0 0 24 24" role="presentation">
+                                <circle cx="12" cy="12" r="9" />
+                                <path d="M12 7v5l3 2" />
+                              </svg>
+                            </span>
+                            <span>{formatServiceSchedule(service)}</span>
+                            <button
+                              type="button"
+                              className={
+                                isInterested
+                                  ? "mobile-interest-inline interested"
+                                  : "mobile-interest-inline"
+                              }
+                              onClick={() =>
+                                handleReaction(
+                                  service.id,
+                                  "interested"
+                                )
+                              }
+                              aria-label={
+                                isInterested
+                                  ? `Remove interested reaction (${interestedCount})`
+                                  : `Mark interested (${interestedCount})`
+                              }
+                            >
+                              {isInterested ? "♥" : "♡"} {interestedCount}
+                            </button>
+                          </h3>
+
+                        </div>
 
 
                         {/* META */}
                         <div className="service-meta">
 
   <span className="service-full-address">
-    📍 {service.address || service.area}
+    <span className="service-location-pin" aria-hidden="true">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z" />
+        <circle cx="12" cy="9" r="2.5" />
+      </svg>
+    </span>
+    {service.address || service.area}
   </span>
 
-  <span>
-    📅 {service.date}
-  </span>
+  {filter === "near" && currentUserLocation && (
+    <span>
+      📍 {formatDistanceKm(
+        getDistanceKm(
+          currentUserLocation.latitude,
+          currentUserLocation.longitude,
+          service.latitude,
+          service.longitude
+        )
+      )}
+    </span>
+  )}
 
-  <span>
-    🕒{" "}
-    {formatTime(service.start)}{" "}
-    –{" "}
-    {formatTime(service.end)}
-  </span>
+
 
 </div>
+
+                        {/* QUICK LANDMARK NOTES / DIRECTIONS */}
+                        {service.notes && (
+                          <p className="service-notes">
+                            {service.notes}
+                          </p>
+                        )}
 
 
                         {/* =================================================
@@ -3008,7 +3775,13 @@ function App() {
                               )
                             }
                           >
-                            {siteT("directions")}
+                            <span className="directions-icon" aria-hidden="true">
+                              <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z" />
+                                <circle cx="12" cy="9" r="2.5" />
+                              </svg>
+                            </span>
+                            <span>{siteT("directions").replace(/^📍\s*/, "")}</span>
                           </button>
 
                         </div>
@@ -3205,17 +3978,16 @@ function App() {
 
             <form onSubmit={publishService}>
 
-              {/* SERVICE NAME */}
+              {/* SERVICE NAME (OPTIONAL) */}
               <label>
-                Service name *
+                Service name
 
                 <input
                   name="title"
                   value={form.title}
                   onChange={updateForm}
-                  placeholder="e.g. Free Medical Camp"
+                  placeholder="Optional — e.g. Free Medical Camp"
                   maxLength={100}
-                  required
                 />
               </label>
 
@@ -3453,7 +4225,7 @@ function App() {
 
               {/* NOTES */}
               <label>
-                Quick landmark notes / directions
+                Quick landmark notes / directions *
 
                 <textarea
                   name="notes"
@@ -3462,6 +4234,7 @@ function App() {
                   placeholder="Share useful details for visitors..."
                   rows="3"
                   maxLength={500}
+                  required
                 />
               </label>
 
@@ -4380,7 +5153,8 @@ function App() {
         </div>
       )}
 
-    </div>
+      </div>
+    </>
   );
 }
 

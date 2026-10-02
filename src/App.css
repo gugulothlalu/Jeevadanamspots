@@ -438,10 +438,10 @@ main {
 }
 
 .service-notes {
-  margin: 0 0 20px;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
+  margin-bottom: 14px;
+  font-size: 11px;
+  color: #111827;
+  line-height: 1.6;
 }
 
 .service-meta {
@@ -790,7 +790,7 @@ main {
   }
 
   .hero h2 {
-    font-size: 31px;
+    font-size: 23px;
   }
 
   .hero p {
@@ -1430,19 +1430,18 @@ main {
 
 /* Directions */
 .map-button {
-  background: linear-gradient(135deg, #fffaf3, #fff6e9);
-  color: #b86108;
-
-  border: 1px solid #f2d6aa;
-
-  box-shadow: 0 2px 7px rgba(184, 97, 8, 0.05);
+  background: #075c3b;
+  color: #ffffff;
+  border: 1px solid #075c3b;
+  box-shadow: 0 4px 12px rgba(7, 92, 59, 0.18);
 }
 
 .map-button:hover {
-  background: linear-gradient(135deg, #fff6e8, #ffefd8);
-  border-color: #e9bd7d;
+  background: #064d32;
+  border-color: #064d32;
+  color: #ffffff;
   transform: translateY(-1px);
-  box-shadow: 0 5px 12px rgba(184, 97, 8, 0.09);
+  box-shadow: 0 6px 16px rgba(7, 92, 59, 0.24);
 }
 
 
@@ -1699,8 +1698,8 @@ main {
 }
 
 .service-meta .service-full-address {
-  color: #0f1f38;
-  font-weight: 600;
+  color: #111827;
+  font-weight: 700;
   line-height: 1.55;
 }
 
@@ -2482,4 +2481,1218 @@ main {
     border-radius: 17px;
   }
 }
+/* =========================================================
+   JEEVADANAM — MOBILE V1 OVERRIDES
+   Add this block at the VERY END of src/App.css.
+   No JSX or functionality changes.
+   ========================================================= */
 
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  min-width: 320px;
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
+@media (max-width: 700px) {
+  /* Header */
+  .header {
+    width: 100%;
+    padding: 13px 14px;
+    gap: 10px;
+  }
+
+  .brand {
+    min-width: 0;
+    flex: 1 1 auto;
+    gap: 9px;
+  }
+
+  .brand-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 12px;
+    font-size: 20px;
+  }
+
+  .brand-title {
+    max-width: 100%;
+    font-size: 21px;
+    letter-spacing: -0.7px;
+  }
+
+  .brand p {
+    max-width: 150px;
+    margin-top: 3px;
+    font-size: 9px;
+    line-height: 1.35;
+  }
+
+  .header-actions {
+    flex: 0 0 auto;
+    gap: 5px;
+  }
+
+  .social-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+  .social-icon svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .add-button {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 12px;
+  }
+
+  /* Main + Hero */
+  main {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 14px 12px 28px;
+  }
+
+  .hero {
+    width: 100%;
+    min-height: 0;
+    padding: 27px 20px;
+    border-radius: 18px;
+  }
+
+  .hero-copy {
+    width: 100%;
+    max-width: none;
+  }
+
+  .eyebrow {
+    font-size: 9px;
+    letter-spacing: 1.15px;
+  }
+
+  .hero h2 {
+    margin: 13px 0 11px;
+    font-size: clamp(28px, 8vw, 34px);
+    line-height: 1.12;
+    letter-spacing: -1px;
+  }
+
+  .hero p {
+    max-width: none;
+    margin-bottom: 19px;
+    font-size: 12px;
+    line-height: 1.65;
+  }
+
+  .hero-button {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 15px;
+    border-radius: 11px;
+    font-size: 13px;
+  }
+
+  .hero-art {
+    display: none;
+  }
+
+  /* How Jeevadanam Works */
+  .how-it-works {
+    width: 100%;
+    margin: 20px 0 24px;
+    padding: 21px 15px;
+    border-radius: 17px;
+  }
+
+  .how-heading {
+    margin-bottom: 20px;
+  }
+
+  .how-eyebrow {
+    margin-bottom: 7px;
+    font-size: 9px;
+    letter-spacing: 1.2px;
+  }
+
+  .how-heading h2 {
+    font-size: 22px;
+    line-height: 1.2;
+  }
+
+  .how-heading p {
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  .how-columns {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .how-card {
+    padding: 17px;
+    border-radius: 15px;
+  }
+
+  .how-card-header {
+    gap: 10px;
+    margin-bottom: 19px;
+  }
+
+  .how-icon {
+    width: 43px;
+    height: 43px;
+    border-radius: 12px;
+    font-size: 21px;
+  }
+
+  .how-card-header h3 {
+    font-size: 16px;
+  }
+
+  .how-card-header p {
+    margin-top: 3px;
+    font-size: 10px;
+  }
+
+  .how-steps {
+    gap: 15px;
+  }
+
+  .how-step {
+    gap: 10px;
+  }
+
+  .how-step > span {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    font-size: 11px;
+  }
+
+  .how-step strong {
+    margin-bottom: 3px;
+    font-size: 12px;
+  }
+
+  .how-step p {
+    font-size: 11px;
+    line-height: 1.55;
+  }
+
+  .how-action {
+    min-height: 46px;
+    margin-top: 19px;
+    padding: 11px 13px;
+    font-size: 12px;
+  }
+
+  /* Privacy */
+  .privacy-banner {
+    width: 100%;
+    margin: 17px 0 24px;
+    padding: 14px;
+    gap: 10px;
+    border-radius: 13px;
+  }
+
+  .privacy-icon {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 10px;
+    font-size: 18px;
+  }
+
+  .privacy-banner strong {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .privacy-banner p {
+    margin-top: 5px;
+    font-size: 10px;
+    line-height: 1.55;
+  }
+
+  /* Search */
+  .section-heading {
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+
+  .section-heading h2 {
+    font-size: 20px;
+  }
+
+  .section-heading p {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .count-badge {
+    flex-shrink: 0;
+    padding: 7px 9px;
+    font-size: 10px;
+  }
+
+  .search-box {
+    width: 100%;
+    min-height: 50px;
+    gap: 9px;
+    padding: 0 12px;
+    border-radius: 12px;
+  }
+
+  .search-box > span {
+    font-size: 25px;
+  }
+
+  .search-box input {
+    min-width: 0;
+    padding: 12px 0;
+    font-size: 13px;
+  }
+
+  /* Filters: horizontal swipe */
+  .filters {
+    flex-wrap: nowrap;
+    width: calc(100vw - 24px);
+    margin: 12px 0 20px;
+    gap: 7px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 2px 1px 7px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filter {
+    flex: 0 0 auto;
+    min-height: 38px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  /* Categories */
+  .category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .category-card {
+    min-width: 0;
+    min-height: 67px;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  .category-icon {
+    font-size: 21px;
+  }
+
+  /* Service feed */
+  .results-heading {
+    margin: 26px 0 13px;
+    gap: 8px;
+  }
+
+  .results-heading h3 {
+    min-width: 0;
+    font-size: 16px;
+  }
+
+  .live-badge,
+  .local-badge,
+  .demo-badge {
+    flex-shrink: 0;
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+
+  .service-grid {
+    grid-template-columns: 1fr;
+    gap: 11px;
+  }
+
+  .service-card {
+    width: 100%;
+    min-width: 0;
+    padding: 15px;
+    border-radius: 16px;
+  }
+
+  .service-card h3 {
+    margin: 13px 0 7px;
+    font-size: 17px;
+    line-height: 1.35;
+  }
+
+  .service-notes {
+    margin-bottom: 14px;
+    font-size: 11px;
+    color: #111827;
+    line-height: 1.6;
+  }
+
+  .service-meta {
+    gap: 8px;
+    padding: 12px 0;
+    font-size: 11px;
+  }
+
+  .service-full-address,
+  .service-meta span {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .active-badge,
+  .upcoming-badge,
+  .completed-badge {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  /* Interested + Report */
+  .interest-panel,
+  .report-panel {
+    width: 100%;
+    min-height: 0;
+    margin-top: 9px;
+    border-radius: 12px;
+  }
+
+  .interest-panel .interested-button,
+  .report-panel .report-button {
+    min-height: 46px;
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+
+  .interest-info,
+  .report-info {
+    min-width: 0;
+    min-height: 36px;
+    padding: 7px 10px;
+    font-size: 10px;
+  }
+
+  /* Card actions */
+  .card-actions {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 9px;
+  }
+
+  .card-actions button,
+  .outline-button,
+  .map-button {
+    width: 100%;
+    min-width: 0;
+    min-height: 47px;
+    height: auto;
+    padding: 10px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+  }
+
+  /* Empty state */
+  .empty-state {
+    width: 100%;
+    padding: 46px 16px;
+    border-radius: 15px;
+  }
+
+  .empty-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 39px;
+  }
+
+  /* Bottom banner */
+  .bottom-banner {
+    width: 100%;
+    margin-top: 25px;
+    padding: 19px;
+    gap: 14px;
+    border-radius: 15px;
+  }
+
+  .bottom-banner h2 {
+    font-size: 17px;
+  }
+
+  .bottom-banner p {
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .bottom-banner .primary-button {
+    width: 100%;
+    min-height: 46px;
+    padding: 11px 14px;
+    font-size: 12px;
+  }
+
+  /* Modals: mobile bottom-sheet */
+  .modal-backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 94dvh;
+    margin: 0;
+    padding: 18px 15px calc(20px + env(safe-area-inset-bottom));
+    border-radius: 20px 20px 0 0;
+  }
+
+  .details-modal {
+    width: 100%;
+  }
+
+  .modal-heading {
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .modal-heading h2 {
+    font-size: 19px;
+    line-height: 1.3;
+  }
+
+  .close-button {
+    width: 37px;
+    height: 37px;
+    min-width: 37px;
+  }
+
+  .notice {
+    gap: 9px;
+    margin-bottom: 17px;
+    padding: 12px;
+    border-radius: 11px;
+  }
+
+  .notice p {
+    font-size: 10px;
+    line-height: 1.55;
+  }
+
+  .modal form {
+    gap: 13px;
+  }
+
+  .modal form > label {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .modal form > label > input[type="text"],
+  .modal form > label > select,
+  .modal input,
+  .modal select,
+  .modal textarea {
+    min-height: 47px;
+    padding: 12px 13px;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  .modal textarea {
+    min-height: 90px;
+  }
+
+  .form-section-title {
+    margin-top: 10px;
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+
+  .date-options {
+    gap: 7px;
+    margin-bottom: 8px;
+  }
+
+  .date-option {
+    min-height: 47px;
+    padding: 9px 6px;
+    border-radius: 11px;
+    font-size: 12px;
+  }
+
+  .custom-date-input {
+    min-height: 47px;
+    margin-bottom: 10px;
+    padding: 12px 13px;
+  }
+
+  .time-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+  }
+
+  .location-picker > button {
+    width: 100%;
+    min-height: 47px;
+    margin: 8px 0 11px;
+    padding: 11px 13px;
+    border-radius: 11px;
+    font-size: 13px;
+  }
+
+  .publish-button {
+    min-height: 49px;
+  }
+
+  .details-list {
+    gap: 11px;
+    margin-bottom: 18px;
+    font-size: 12px;
+  }
+
+  /* AI */
+  .ai-floating-button {
+    right: 12px;
+    bottom: 12px;
+    min-height: 48px;
+    padding: 10px 14px;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .jeevadanam-ai-panel {
+    border-radius: 18px !important;
+  }
+
+  .ai-panel,
+  .ai-assistant {
+    right: 8px;
+    bottom: 8px;
+    width: calc(100vw - 16px);
+    max-width: calc(100vw - 16px);
+    height: calc(100dvh - 16px);
+    max-height: calc(100dvh - 16px);
+    border-radius: 18px;
+  }
+
+  .ai-messages {
+    padding: 13px;
+  }
+
+  .ai-message {
+    max-width: 90%;
+    padding: 10px 11px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .header {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .brand-icon {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+  }
+
+  .brand-title {
+    font-size: 18px;
+  }
+
+  .brand p {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 4px;
+  }
+
+  .social-icon,
+  .add-button {
+    width: 36px;
+    min-width: 36px;
+    height: 36px;
+  }
+
+  main {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  .hero {
+    padding: 23px 16px;
+  }
+
+  .category-card {
+    padding: 9px 8px;
+    font-size: 9px;
+  }
+
+  .category-icon {
+    font-size: 18px;
+  }
+
+  .date-option {
+    font-size: 10px;
+  }
+}
+
+/* =========================================================
+   MOBILE SERVICE CARD — COMPACT INTEREST / NOTES
+   Existing desktop card and reaction logic remain unchanged.
+   ========================================================= */
+.mobile-interest-inline {
+  display: none;
+}
+
+.service-date-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  /* Hide only the large Interested panel on mobile.
+     The same reaction is available beside the date. */
+  .interest-panel {
+    display: none;
+  }
+
+  .mobile-interest-inline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    min-width: 34px;
+    padding: 2px 3px;
+    border: 0;
+    background: transparent;
+    color: #be123c;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1.2;
+    cursor: pointer;
+  }
+
+  .mobile-interest-inline.interested {
+    color: #be123c;
+  }
+
+  /* Keep the Report panel as the same box, with its
+     flag + label + count on one row and the safety text below. */
+  .report-panel {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .report-panel .report-button {
+    min-height: 48px;
+    white-space: nowrap;
+  }
+
+  .report-panel .report-info {
+    min-height: 40px;
+    white-space: nowrap;
+  }
+}
+
+/* =========================================================
+   MOBILE CARD ICON / LOCATION SCALE
+   Keep existing functionality and desktop styling intact.
+   ========================================================= */
+.service-full-address {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+
+.service-location-pin {
+  width: 21px;
+  height: 21px;
+  flex: 0 0 21px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  color: #8b6a2f;
+}
+
+.service-location-pin svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 600px) {
+  .near-me-button {
+    min-width: 110px !important;
+    min-height: 44px !important;
+    padding: 0 14px !important;
+    font-size: 14px !important;
+  }
+
+  .mobile-interest-inline {
+    min-width: 54px;
+    min-height: 30px;
+    padding: 3px 7px;
+    font-size: 17px;
+    font-weight: 800;
+  }
+
+  .service-location-pin {
+    width: 22px;
+    height: 22px;
+    flex-basis: 22px;
+    margin-top: 0;
+  }
+
+  .card-actions button,
+  .outline-button,
+  .map-button {
+    min-height: 52px;
+    font-size: 15px;
+  }
+
+  .location-picker > button {
+    min-height: 54px !important;
+    padding: 13px 14px !important;
+    font-size: 15px !important;
+  }
+}
+
+
+
+/* =========================================================
+   MOBILE REFERENCE ICONS — Near Me / Time / Directions
+   Mobile-only visual refinement. Existing functionality untouched.
+   ========================================================= */
+.near-me-icon,
+.directions-icon,
+.service-time-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.near-me-icon svg,
+.directions-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.service-time-card {
+  display: flex !important;
+  align-items: center;
+  gap: 9px;
+}
+
+.service-time-icon svg {
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 600px) {
+  .near-me-button {
+    gap: 7px !important;
+    min-width: 112px !important;
+    min-height: 44px !important;
+    padding: 0 13px !important;
+    font-size: 14px !important;
+  }
+
+  .near-me-icon svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .service-time-card {
+    width: 100%;
+    min-height: 58px;
+    margin-top: 1px;
+    padding: 10px 13px;
+    border: 1px solid #dfe5ee;
+    border-radius: 14px;
+    background: #f5f7fb;
+    color: #43536a;
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.35;
+  }
+
+  .service-time-icon {
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+  }
+
+  .service-time-icon svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .card-actions .map-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+  }
+
+  .directions-icon svg {
+    width: 19px;
+    height: 19px;
+  }
+}
+
+
+/* =========================================================
+   SERVICE CARD — DATE + TIME REPLACES SERVICE NAME
+   ========================================================= */
+.service-schedule-row {
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 12px;
+  margin: 10px 0 4px;
+}
+
+.service-schedule {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 !important;
+  padding: 10px 14px;
+  border: 1px solid #dfe6ef;
+  border-radius: 12px;
+  background: #f3f6fb;
+  color: #24324a;
+  font-size: 16px !important;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.service-schedule-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 27px;
+  height: 27px;
+}
+
+.service-schedule-icon svg {
+  width: 27px;
+  height: 27px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 600px) {
+  .service-schedule-row {
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0 3px;
+  }
+
+  .service-schedule {
+    gap: 8px;
+    padding: 9px 10px;
+    font-size: 13.5px !important;
+    line-height: 1.35;
+  }
+
+  .service-schedule-icon,
+  .service-schedule-icon svg {
+    width: 23px;
+    height: 23px;
+  }
+
+  .service-schedule-row .active-badge,
+  .service-schedule-row .upcoming-badge {
+    flex: 0 0 auto;
+    padding: 6px 8px;
+    font-size: 9px;
+  }
+}
+
+
+/* =========================================================
+   COMMUNITY CARD — LANDMARK NOTES FOLLOW ADDRESS
+   ========================================================= */
+.service-meta + .service-notes {
+  margin: 2px 0 12px;
+  padding-left: 2px;
+}
+
+@media (max-width: 600px) {
+  .service-schedule .mobile-interest-inline {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .service-meta + .service-notes {
+    margin: 0 0 10px;
+    padding-left: 1px;
+  }
+}
+
+/* =========================================================
+   MOBILE HEADER COMPACT — prevent brand title from crowding
+   Existing functionality unchanged.
+   ========================================================= */
+@media (max-width: 700px) {
+  .header {
+    padding: 8px 8px !important;
+    gap: 5px !important;
+    column-gap: 5px !important;
+  }
+
+  .jeevadanam-menu-left {
+    width: 42px !important;
+    min-width: 42px !important;
+    height: 42px !important;
+    flex: 0 0 42px !important;
+    padding: 0 !important;
+    font-size: 18px !important;
+    border-radius: 11px !important;
+  }
+
+  .brand {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    gap: 6px !important;
+  }
+
+  .brand-icon {
+    width: 34px !important;
+    min-width: 34px !important;
+    height: 34px !important;
+    border-radius: 10px !important;
+    font-size: 17px !important;
+  }
+
+  .brand-title {
+    max-width: 150px !important;
+    font-size: 17px !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.45px !important;
+    white-space: nowrap !important;
+  }
+
+  .brand p {
+    max-width: 145px !important;
+    margin-top: 2px !important;
+    font-size: 7px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+  }
+
+  .header-actions {
+    flex: 0 0 auto !important;
+    gap: 4px !important;
+    margin-left: auto !important;
+  }
+
+  .header-actions .social-icon,
+  .header-actions .add-button {
+    width: 34px !important;
+    min-width: 34px !important;
+    height: 34px !important;
+    padding: 0 !important;
+    border-radius: 10px !important;
+  }
+
+  .header-actions .social-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .header-actions .social-icon span[aria-hidden="true"] {
+    font-size: 17px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .header {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+    gap: 4px !important;
+  }
+
+  .jeevadanam-menu-left {
+    width: 38px !important;
+    min-width: 38px !important;
+    height: 38px !important;
+    flex-basis: 38px !important;
+  }
+
+  .brand-icon {
+    width: 31px !important;
+    min-width: 31px !important;
+    height: 31px !important;
+    font-size: 15px !important;
+  }
+
+  .brand-title {
+    max-width: 132px !important;
+    font-size: 15px !important;
+  }
+
+  .brand p {
+    display: none !important;
+  }
+
+  .header-actions .social-icon,
+  .header-actions .add-button {
+    width: 31px !important;
+    min-width: 31px !important;
+    height: 31px !important;
+  }
+}
+
+/* =========================================================
+   FINAL MOBILE REPORT ROW FIX
+   Keep Report + count + safety text on ONE LINE.
+   Header remains the only other adjusted area.
+   ========================================================= */
+@media (max-width: 700px) {
+  .report-panel {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    min-height: 42px !important;
+    height: 42px !important;
+    padding: 0 !important;
+    margin-top: 8px !important;
+    overflow: hidden !important;
+  }
+
+  .report-panel .report-button {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
+    height: 42px !important;
+    padding: 0 8px !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    font-size: 9px !important;
+    line-height: 1 !important;
+  }
+
+  .report-panel .report-info {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
+    height: 42px !important;
+    padding: 0 7px !important;
+    border-left: 0 !important;
+    border-top: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+    font-size: 8px !important;
+    line-height: 1 !important;
+  }
+}
+
+
+/* =========================================================
+   JEEVADANAM OPENING INTRO — 8-SECOND 3D VIDEO
+   Uses the uploaded Jeevadanam video trimmed from 00:02 to 00:10.
+   Existing site UI/functionality remains unchanged.
+========================================================= */
+.jeevadanam-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+.jeevadanam-intro-video {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .jeevadanam-intro-video {
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;
+  }
+}
+
+/* Quick Landmark — dark text */
+.service-notes {
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
